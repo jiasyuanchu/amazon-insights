@@ -2,8 +2,10 @@ from pydantic import BaseModel, Field
 from typing import Optional, Dict, List, Any
 from datetime import datetime
 
+
 class ASINRequest(BaseModel):
     asin: str = Field(..., description="Amazon ASIN", example="B07R7RMQF5")
+
 
 class ProductSummary(BaseModel):
     asin: str
@@ -17,11 +19,13 @@ class ProductSummary(BaseModel):
     last_updated: str
     history_count: int = 0
 
+
 class TrackingResult(BaseModel):
     success: bool
     message: str
     asin: str
     product_summary: Optional[ProductSummary] = None
+
 
 class BatchTrackingResult(BaseModel):
     total_products: int
@@ -30,15 +34,18 @@ class BatchTrackingResult(BaseModel):
     results: Dict[str, bool]
     summaries: List[ProductSummary] = []
 
+
 class PriceHistoryEntry(BaseModel):
     date: str
     price: Optional[float] = None
     rating: Optional[float] = None
     review_count: Optional[int] = None
 
+
 class PriceHistory(BaseModel):
     asin: str
     history: List[PriceHistoryEntry]
+
 
 class Alert(BaseModel):
     id: int
@@ -50,11 +57,13 @@ class Alert(BaseModel):
     message: str
     triggered_at: str
 
+
 class AlertsSummary(BaseModel):
     total_alerts: int
     by_type: Dict[str, int] = {}
     by_asin: Dict[str, int] = {}
     recent_alerts: List[Alert] = []
+
 
 class SystemStatus(BaseModel):
     status: str
@@ -62,6 +71,7 @@ class SystemStatus(BaseModel):
     firecrawl_available: bool
     monitored_asins: List[str]
     last_check: str
+
 
 class ErrorResponse(BaseModel):
     error: str

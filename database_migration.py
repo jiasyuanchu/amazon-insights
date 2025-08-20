@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 import json
 
 # Add src directory to path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 import sqlalchemy as sa
 from sqlalchemy import create_engine, text, MetaData, Table
@@ -25,21 +25,22 @@ from src.models.product_models import Base
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class DatabaseMigrator:
     """Handles migration from SQLite to PostgreSQL"""
-    
+
     def __init__(self):
-        self.sqlite_url = 'sqlite:///data/amazon_insights.db'
+        self.sqlite_url = "sqlite:///data/amazon_insights.db"
         self.postgres_url = DATABASE_URL
-        
+
         # Ensure we have valid PostgreSQL URL
-        if 'sqlite' in self.postgres_url.lower():
+        if "sqlite" in self.postgres_url.lower():
             raise ValueError("PostgreSQL URL required for migration")
-        
+
         logger.info(f"Migration: SQLite -> PostgreSQL")
         logger.info(f"Source: {self.sqlite_url}")
         logger.info(f"Target: {self.postgres_url}")
-    
+
     def migrate_data(self) -> Dict[str, Any]:
         """Execute complete data migration"""
         try:
@@ -49,85 +50,93 @@ class DatabaseMigrator:
                 "records_migrated": {},
                 "errors": [],
                 "completed_at": None,
-                "success": True
+                "success": True,
             }
-            
+
             # Create engines
             sqlite_engine = create_engine(self.sqlite_url)
             postgres_engine = create_engine(self.postgres_url)
-            
+
             # Test connections
             self._test_connections(sqlite_engine, postgres_engine)
-            
+
             # Create PostgreSQL schema
             logger.info("Creating PostgreSQL schema...")
             self._create_postgres_schema(postgres_engine)
-            
+
             # Migrate data
             tables_to_migrate = [
-                'products',
-                'product_snapshots', 
-                'price_alerts',
-                'competitive_groups',
-                'competitive_group_members'
+                "products",
+                "product_snapshots",
+                "price_alerts",
+                "competitive_groups",
+                "competitive_group_members",
             ]
-            
+
             for table_name in tables_to_migrate:
                 try:
-                    records_count = self._migrate_table(sqlite_engine, postgres_engine, table_name)
+                    records_count = self._migrate_table(
+                        sqlite_engine, postgres_engine, table_name
+                    )
                     migration_results["tables_migrated"].append(table_name)
                     migration_results["records_migrated"][table_name] = records_count
-                    logger.info(f"✅ Migrated {records_count} records from {table_name}")
+                    logger.info(
+                        f"✅ Migrated {records_count} records from {table_name}"
+                    )
                 except Exception as e:
                     error_msg = f"Failed to migrate table {table_name}: {str(e)}"
                     logger.error(error_msg)
                     migration_results["errors"].append(error_msg)
-            
+
             # Create indexes and constraints
             self._create_postgres_indexes(postgres_engine)
-            
+
             # Verify migration
-            verification_results = self._verify_migration(sqlite_engine, postgres_engine)
+            verification_results = self._verify_migration(
+                sqlite_engine, postgres_engine
+            )
             migration_results["verification"] = verification_results
-            
+
             migration_results["completed_at"] = datetime.now().isoformat()
-            
+
             if migration_results["errors"]:
                 migration_results["success"] = False
-                logger.warning(f"Migration completed with {len(migration_results['errors'])} errors")
+                logger.warning(
+                    f"Migration completed with {len(migration_results['errors'])} errors"
+                )
             else:
                 logger.info("✅ Migration completed successfully!")
-            
+
             return migration_results
-            
+
         except Exception as e:
             logger.error(f"Migration failed: {str(e)}")
             return {
                 "success": False,
                 "error": str(e),
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
-    
+
     def _test_connections(self, sqlite_engine, postgres_engine):
         """Test database connections"""
         # Test SQLite
         with sqlite_engine.connect() as conn:
             result = conn.execute(text("SELECT 1"))
             logger.info("✅ SQLite connection successful")
-        
+
         # Test PostgreSQL
         with postgres_engine.connect() as conn:
             result = conn.execute(text("SELECT version()"))
             version = result.fetchone()[0]
             logger.info(f"✅ PostgreSQL connection successful: {version}")
-    
+
     def _create_postgres_schema(self, postgres_engine):
         """Create PostgreSQL schema with enhanced design"""
-        
+
         # Drop existing tables if they exist
         with postgres_engine.connect() as conn:
             conn.execute(text("DROP TABLE IF EXISTS api_usage_logs CASCADE"))
-            conn.execute(text("DROP TABLE IF EXISTS competitive_analyses CASCADE")) 
+            conn.execute(text("DROP TABLE IF EXISTS competitive_analyses CASCADE"))
             conn.execute(text("DROP TABLE IF EXISTS alerts CASCADE"))
             conn.execute(text("DROP TABLE IF EXISTS alert_rules CASCADE"))
             conn.execute(text("DROP TABLE IF EXISTS api_keys CASCADE"))
@@ -139,7 +148,7 @@ class DatabaseMigrator:
             conn.execute(text("DROP TABLE IF EXISTS product_snapshots CASCADE"))
             conn.execute(text("DROP TABLE IF EXISTS products CASCADE"))
             conn.commit()
-        
+
         # Create enhanced schema
         schema_sql = """
         -- Products table
@@ -262,75 +271,94 @@ class DatabaseMigrator:
             updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
         );
         """
-        
+
         with postgres_engine.connect() as conn:
             conn.execute(text(schema_sql))
             conn.commit()
-        
+
         logger.info("✅ PostgreSQL schema created successfully")
-    
+
     def _migrate_table(self, sqlite_engine, postgres_engine, table_name: str) -> int:
         """Migrate specific table from SQLite to PostgreSQL"""
-        
+
         # Check if table exists in SQLite
         with sqlite_engine.connect() as conn:
-            result = conn.execute(text(
-                "SELECT name FROM sqlite_master WHERE type='table' AND name=:table_name"
-            ), {"table_name": table_name})
+            result = conn.execute(
+                text(
+                    "SELECT name FROM sqlite_master WHERE type='table' AND name=:table_name"
+                ),
+                {"table_name": table_name},
+            )
             if not result.fetchone():
                 logger.warning(f"Table {table_name} not found in SQLite, skipping")
                 return 0
-        
+
         # Read data from SQLite
         df = pd.read_sql_table(table_name, sqlite_engine)
-        
+
         if df.empty:
             logger.info(f"Table {table_name} is empty, skipping")
             return 0
-        
+
         # Transform data for PostgreSQL
         df = self._transform_data_for_postgres(df, table_name)
-        
+
         # Write to PostgreSQL
-        df.to_sql(table_name, postgres_engine, if_exists='append', index=False, method='multi')
-        
+        df.to_sql(
+            table_name, postgres_engine, if_exists="append", index=False, method="multi"
+        )
+
         return len(df)
-    
-    def _transform_data_for_postgres(self, df: pd.DataFrame, table_name: str) -> pd.DataFrame:
+
+    def _transform_data_for_postgres(
+        self, df: pd.DataFrame, table_name: str
+    ) -> pd.DataFrame:
         """Transform data to match PostgreSQL schema"""
-        
+
         # Convert datetime columns
-        datetime_columns = ['created_at', 'updated_at', 'scraped_at', 'triggered_at', 'added_at', 'first_tracked_at', 'last_updated_at']
+        datetime_columns = [
+            "created_at",
+            "updated_at",
+            "scraped_at",
+            "triggered_at",
+            "added_at",
+            "first_tracked_at",
+            "last_updated_at",
+        ]
         for col in datetime_columns:
             if col in df.columns:
                 df[col] = pd.to_datetime(df[col])
-        
+
         # Handle JSON columns
-        json_columns = ['bsr_data', 'raw_data', 'metadata', 'settings']
+        json_columns = ["bsr_data", "raw_data", "metadata", "settings"]
         for col in json_columns:
             if col in df.columns:
-                df[col] = df[col].apply(lambda x: json.dumps(x) if x and not isinstance(x, str) else x)
-        
-        # Table-specific transformations
-        if table_name == 'product_snapshots':
-            # Ensure scraped_at is not null
-            if 'scraped_at' in df.columns:
-                df['scraped_at'] = df['scraped_at'].fillna(datetime.now())
-            
-            # Convert bullet_points to PostgreSQL array format
-            if 'bullet_points' in df.columns:
-                df['bullet_points'] = df['bullet_points'].apply(
-                    lambda x: x if isinstance(x, list) else [] if pd.isna(x) else [str(x)]
+                df[col] = df[col].apply(
+                    lambda x: json.dumps(x) if x and not isinstance(x, str) else x
                 )
-        
+
+        # Table-specific transformations
+        if table_name == "product_snapshots":
+            # Ensure scraped_at is not null
+            if "scraped_at" in df.columns:
+                df["scraped_at"] = df["scraped_at"].fillna(datetime.now())
+
+            # Convert bullet_points to PostgreSQL array format
+            if "bullet_points" in df.columns:
+                df["bullet_points"] = df["bullet_points"].apply(
+                    lambda x: (
+                        x if isinstance(x, list) else [] if pd.isna(x) else [str(x)]
+                    )
+                )
+
         # Remove any None values that should be handled by defaults
         df = df.where(pd.notnull(df), None)
-        
+
         return df
-    
+
     def _create_postgres_indexes(self, postgres_engine):
         """Create optimized indexes for PostgreSQL"""
-        
+
         index_sql = """
         -- Primary performance indexes
         CREATE INDEX IF NOT EXISTS idx_products_brand ON products(brand);
@@ -361,118 +389,131 @@ class DatabaseMigrator:
         CREATE INDEX IF NOT EXISTS idx_api_keys_hash ON api_keys(key_hash);
         CREATE INDEX IF NOT EXISTS idx_api_keys_active ON api_keys(is_active);
         """
-        
+
         with postgres_engine.connect() as conn:
             conn.execute(text(index_sql))
             conn.commit()
-        
+
         logger.info("✅ PostgreSQL indexes created successfully")
-    
+
     def _verify_migration(self, sqlite_engine, postgres_engine) -> Dict[str, Any]:
         """Verify migration data integrity"""
         verification = {
             "table_counts": {},
             "data_integrity_checks": {},
             "missing_records": [],
-            "success": True
+            "success": True,
         }
-        
-        tables = ['products', 'product_snapshots', 'price_alerts']
-        
+
+        tables = ["products", "product_snapshots", "price_alerts"]
+
         for table in tables:
             try:
                 # Count records in both databases
                 with sqlite_engine.connect() as conn:
-                    sqlite_count = conn.execute(text(f"SELECT COUNT(*) FROM {table}")).scalar()
-                
+                    sqlite_count = conn.execute(
+                        text(f"SELECT COUNT(*) FROM {table}")
+                    ).scalar()
+
                 with postgres_engine.connect() as conn:
-                    postgres_count = conn.execute(text(f"SELECT COUNT(*) FROM {table}")).scalar()
-                
+                    postgres_count = conn.execute(
+                        text(f"SELECT COUNT(*) FROM {table}")
+                    ).scalar()
+
                 verification["table_counts"][table] = {
                     "sqlite": sqlite_count,
                     "postgresql": postgres_count,
-                    "match": sqlite_count == postgres_count
+                    "match": sqlite_count == postgres_count,
                 }
-                
+
                 if sqlite_count != postgres_count:
                     verification["success"] = False
                     verification["missing_records"].append(
                         f"{table}: SQLite={sqlite_count}, PostgreSQL={postgres_count}"
                     )
-                
+
             except Exception as e:
                 logger.error(f"Verification failed for {table}: {str(e)}")
                 verification["success"] = False
-        
+
         return verification
-    
+
     def create_sample_api_key(self, postgres_engine) -> str:
         """Create a sample API key for testing"""
         import secrets
         import hashlib
-        
+
         # Generate API key
         key_id = f"sk_live_{secrets.token_urlsafe(32)}"
         key_hash = hashlib.sha256(key_id.encode()).hexdigest()
-        
+
         insert_sql = """
         INSERT INTO api_keys (key_id, key_hash, name, key_type, permissions, rate_limit_tier)
         VALUES (:key_id, :key_hash, :name, :key_type, :permissions, :tier)
         """
-        
+
         with postgres_engine.connect() as conn:
-            conn.execute(text(insert_sql), {
-                "key_id": key_id,
-                "key_hash": key_hash,
-                "name": "Default Development Key",
-                "key_type": "secret",
-                "permissions": json.dumps([
-                    "read:products", "write:products", 
-                    "read:competitive", "write:competitive",
-                    "read:alerts"
-                ]),
-                "tier": "pro"
-            })
+            conn.execute(
+                text(insert_sql),
+                {
+                    "key_id": key_id,
+                    "key_hash": key_hash,
+                    "name": "Default Development Key",
+                    "key_type": "secret",
+                    "permissions": json.dumps(
+                        [
+                            "read:products",
+                            "write:products",
+                            "read:competitive",
+                            "write:competitive",
+                            "read:alerts",
+                        ]
+                    ),
+                    "tier": "pro",
+                },
+            )
             conn.commit()
-        
+
         return key_id
+
 
 def main():
     """Main migration function"""
     print("🚀 Starting Amazon Insights Database Migration")
     print("=" * 60)
-    
+
     try:
         migrator = DatabaseMigrator()
         results = migrator.migrate_data()
-        
+
         if results["success"]:
             print("✅ Migration completed successfully!")
             print(f"📊 Tables migrated: {len(results['tables_migrated'])}")
             print(f"📈 Total records: {sum(results['records_migrated'].values())}")
-            
+
             # Create sample API key
             postgres_engine = create_engine(migrator.postgres_url)
             sample_key = migrator.create_sample_api_key(postgres_engine)
             print(f"🔑 Sample API key created: {sample_key}")
             print("\n⚠️  Save this API key for testing! It won't be shown again.")
-            
+
         else:
             print("❌ Migration failed or completed with errors")
             for error in results.get("errors", []):
                 print(f"   Error: {error}")
-        
+
         # Save migration report
-        with open('migration_report.json', 'w') as f:
+        with open("migration_report.json", "w") as f:
             json.dump(results, f, indent=2, default=str)
-        
+
         print(f"\n📄 Migration report saved to: migration_report.json")
-        
+
     except Exception as e:
         print(f"❌ Migration failed: {str(e)}")
         return 1
-    
+
     return 0 if results["success"] else 1
+
 
 if __name__ == "__main__":
     exit_code = main()

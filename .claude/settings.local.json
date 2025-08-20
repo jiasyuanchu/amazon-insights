@@ -3,7 +3,13 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(black:*)",
+      "Bash(pip install:*)",
+      "Bash(python3 -m pip install:*)",
+      "Bash(python3 -m black:*)",
+      "Bash(python3 -m flake8:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

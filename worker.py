@@ -10,9 +10,9 @@ import sys
 import os
 
 # Add src directory to path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 from celery_config import app
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.start()
