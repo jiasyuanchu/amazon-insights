@@ -22,7 +22,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\n    \"B092XMWXK7\",\n    \"B0BVY8K28Q\",\n    \"B0CSMV2DTV\"\n  ],\n  \"group_name\": \"瑜伽墊競品分析\",\n  \"description\": \"針對高端瑜伽墊市場的競爭對手分析\"\n}"
+							"raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\n    \"B092XMWXK7\",\n    \"B0BVY8K28Q\",\n    \"B0CSMV2DTV\"\n  ],\n  \"group_name\": \"Yoga Mat Competitive Analysis\",\n  \"description\": \"Competitive analysis for premium yoga mat market\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/v1/competitive/quick-setup",
@@ -36,7 +36,7 @@
 								"quick-setup"
 							]
 						},
-						"description": "一鍵建立競品組並添加多個競爭對手"
+						"description": "One-click setup to create competitive group and add multiple competitors"
 					},
 					"response": []
 				}
@@ -57,7 +57,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"我的產品競品分析\",\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"description\": \"針對我的主要產品進行競品分析\"\n}"
+							"raw": "{\n  \"name\": \"My Product Competitive Analysis\",\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"description\": \"Competitive analysis for my main product\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/v1/competitive/groups",
@@ -71,7 +71,7 @@
 								"groups"
 							]
 						},
-						"description": "建立新的競品分析組"
+						"description": "Create new competitive analysis group"
 					},
 					"response": []
 				},
@@ -92,7 +92,7 @@
 								"groups"
 							]
 						},
-						"description": "獲取所有競品分析組"
+						"description": "Get all competitive analysis groups"
 					},
 					"response": []
 				},
@@ -114,7 +114,7 @@
 								"{{group_id}}"
 							]
 						},
-						"description": "獲取特定競品組的詳細資訊"
+						"description": "Get specific competitive group details"
 					},
 					"response": []
 				},
@@ -136,7 +136,7 @@
 								"{{group_id}}"
 							]
 						},
-						"description": "刪除競品組"
+						"description": "Delete competitive group"
 					},
 					"response": []
 				}
@@ -157,7 +157,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"asin\": \"B092XMWXK7\",\n  \"competitor_name\": \"高端瑜伽墊競品A\",\n  \"priority\": 1\n}"
+							"raw": "{\n  \"asin\": \"B092XMWXK7\",\n  \"competitor_name\": \"Premium Yoga Mat Competitor A\",\n  \"priority\": 1\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}/competitors",
@@ -173,7 +173,7 @@
 								"competitors"
 							]
 						},
-						"description": "向競品組添加競爭對手"
+						"description": "Add competitor to competitive group"
 					},
 					"response": []
 				},
@@ -197,7 +197,7 @@
 								"{{competitor_asin}}"
 							]
 						},
-						"description": "從競品組移除競爭對手"
+						"description": "Remove competitor from competitive group"
 					},
 					"response": []
 				},
@@ -220,7 +220,7 @@
 								"tracking-status"
 							]
 						},
-						"description": "檢查競品組中所有產品的追蹤狀態"
+						"description": "Check tracking status of all products in competitive group"
 					},
 					"response": []
 				}
@@ -248,7 +248,7 @@
 								"analyze"
 							]
 						},
-						"description": "執行基礎競品分析（結構化分析）"
+						"description": "Execute basic competitive analysis (structured analysis)"
 					},
 					"response": []
 				},
@@ -277,7 +277,7 @@
 								}
 							]
 						},
-						"description": "執行完整競品分析（包含LLM智能報告）"
+						"description": "Execute complete competitive analysis (including LLM intelligent reports)"
 					},
 					"response": []
 				},
@@ -300,7 +300,7 @@
 								"report"
 							]
 						},
-						"description": "獲取詳細的競爭定位報告（含LLM分析）"
+						"description": "Get detailed competitive positioning report (with LLM analysis)"
 					},
 					"response": []
 				},
@@ -329,7 +329,7 @@
 								}
 							]
 						},
-						"description": "獲取競品趨勢分析（指定天數）"
+						"description": "Get competitive trend analysis (specified days)"
 					},
 					"response": []
 				}
@@ -355,7 +355,7 @@
 								"batch-analysis"
 							]
 						},
-						"description": "批次執行所有活躍競品組的分析"
+						"description": "Batch execute analysis for all active competitive groups"
 					},
 					"response": []
 				},
@@ -376,7 +376,7 @@
 								"summary"
 							]
 						},
-						"description": "獲取競品分析系統總覽"
+						"description": "Get competitive analysis system overview"
 					},
 					"response": []
 				}
@@ -397,7 +397,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\n    \"B092XMWXK7\",\n    \"B0BVY8K28Q\",\n    \"B0CSMV2DTV\"\n  ],\n  \"group_name\": \"Demo: 瑜伽墊市場分析\",\n  \"description\": \"展示用瑜伽墊競品分析範例\"\n}"
+							"raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\n    \"B092XMWXK7\",\n    \"B0BVY8K28Q\",\n    \"B0CSMV2DTV\"\n  ],\n  \"group_name\": \"Demo: Yoga Mat Market Analysis\",\n  \"description\": \"Demo example of yoga mat competitive analysis\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/v1/competitive/quick-setup",
@@ -411,7 +411,7 @@
 								"quick-setup"
 							]
 						},
-						"description": "瑜伽墊市場競品分析範例"
+						"description": "Yoga mat market competitive analysis example"
 					},
 					"response": []
 				},
@@ -440,7 +440,7 @@
 								}
 							]
 						},
-						"description": "執行範例群組的完整分析"
+						"description": "Execute complete analysis for example group"
 					},
 					"response": []
 				}
@@ -477,13 +477,13 @@
 			"key": "group_id",
 			"value": "1",
 			"type": "string",
-			"description": "競品組ID，執行建立競品組後請更新此值"
+			"description": "Competitive group ID, please update this value after creating competitive group"
 		},
 		{
 			"key": "competitor_asin",
 			"value": "B092XMWXK7",
 			"type": "string",
-			"description": "競爭對手ASIN"
+			"description": "Competitor ASIN"
 		}
 	]
 }

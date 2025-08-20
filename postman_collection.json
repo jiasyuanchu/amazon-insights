@@ -1,7 +1,7 @@
 {
     "info": {
         "name": "Amazon Insights API",
-        "description": "Amazon 產品資料追蹤系統 API 測試集合",
+        "description": "Amazon Product Tracking System API Test Collection",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "variable": [
@@ -199,7 +199,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\"B092XMWXK7\", \"B0BVY8K28Q\", \"B0CSMV2DTV\"],\n  \"group_name\": \"瑜伽墊競品分析\",\n  \"description\": \"針對瑜伽墊市場的競爭對手分析\"\n}"
+                            "raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\"B092XMWXK7\", \"B0BVY8K28Q\", \"B0CSMV2DTV\"],\n  \"group_name\": \"Yoga Mat Competitive Analysis\",\n  \"description\": \"Competitive analysis for yoga mat market\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/competitive/quick-setup",
@@ -220,7 +220,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"name\": \"我的產品競品分析\",\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"description\": \"針對我的主要產品進行競品分析\"\n}"
+                            "raw": "{\n  \"name\": \"My Product Competitive Analysis\",\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"description\": \"Competitive analysis for my main product\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/competitive/groups",
@@ -253,7 +253,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"asin\": \"B092XMWXK7\",\n  \"competitor_name\": \"高端瑜伽墊競品A\",\n  \"priority\": 1\n}"
+                            "raw": "{\n  \"asin\": \"B092XMWXK7\",\n  \"competitor_name\": \"Premium Yoga Mat Competitor A\",\n  \"priority\": 1\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/competitive/groups/1/competitors",

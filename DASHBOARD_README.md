@@ -1,124 +1,213 @@
-# 🚀 Amazon Insights 競品分析儀表板
+# 🚀 Amazon Insights Competitive Analysis Dashboard
 
-## 📊 功能特色
+## 📊 Feature Highlights
 
-### 多層次數據展示
-- **基礎表現**: 價格對比、評分分析
-- **進階分析**: 競爭指數、Amazon排名分析  
-- **AI智能報告**: SWOT分析、策略建議、市場洞察
+### Multi-layered Data Display
+- **Basic Performance**: Price comparison, rating analysis
+- **Advanced Analysis**: Competitive indices, Amazon ranking analysis  
+- **AI Intelligent Reports**: SWOT analysis, strategic recommendations, market insights
 
-### 視覺化圖表
-- 價格比較柱狀圖
-- 評分vs評論數氣泡圖
-- 競爭力指數動態進度條
+### Interactive Visualizations
+- Price comparison bar charts
+- Rating vs review count bubble charts
+- Dynamic competitive index progress bars
 
-### 響應式設計
-- 支援桌面和行動裝置
-- 漂亮的漸層背景和動畫效果
-- 專業的數據可視化界面
+### Responsive Design
+- Desktop and mobile device support
+- Beautiful gradient backgrounds and animation effects
+- Professional data visualization interface
 
-## 🔧 啟動方式
+## 🔧 Getting Started
 
-### 1. 確認API服務器正在運行
+### 1. Ensure API Server is Running
 ```bash
-# API服務器應該在 localhost:8001
+# API server should be at localhost:8001
 python3 start_api.py
 ```
 
-### 2. 啟動儀表板服務器
+### 2. Start Dashboard Server
 ```bash
-# 在另一個終端視窗執行
+# Run in another terminal window
 python3 frontend_server.py
 ```
 
-### 3. 訪問儀表板
-瀏覽器將自動打開，或手動訪問: http://localhost:8888
+### 3. Access Dashboard
+Browser will open automatically, or manually visit: http://localhost:8080
 
-## 📋 使用步驟
+## 📋 Usage Steps
 
-### 1. 準備競品數據
-在使用儀表板前，需要先通過API創建競品組：
+### 1. Prepare Competitive Data
+Before using the dashboard, create competitive groups via API:
 
 ```bash
-# 使用快速設定API創建競品組
+# Use quick setup API to create competitive group
 curl -X POST "http://localhost:8001/api/v1/competitive/quick-setup" \
   -H "Content-Type: application/json" \
   -d '{
     "main_product_asin": "B07R7RMQF5",
     "competitor_asins": ["B092XMWXK7", "B0BVY8K28Q", "B0CSMV2DTV"],
-    "group_name": "瑜伽墊競品分析",
-    "description": "瑜伽墊市場競爭分析"
+    "group_name": "Yoga Mat Competitive Analysis",
+    "description": "Yoga mat market competition analysis"
   }'
 ```
 
-### 2. 選擇競品組
-- 在儀表板頂部的下拉選單中選擇競品組
-- 系統將自動載入並執行分析
+### 2. Select Competitive Group
+- Use the dropdown menu in the dashboard header
+- Select the competitive group you want to analyze
+- The system will automatically load and display analysis results
 
-### 3. 查看分析結果
-儀表板將顯示：
-- **競爭力概覽**: 價格、質量、受歡迎度、整體競爭力評分
-- **基礎表現分析**: 價格和評分比較圖表
-- **進階分析**: 競爭指數和Amazon排名分析
-- **AI智能報告**: 完整的SWOT分析和策略建議
+### 3. View Analysis Results
+The dashboard displays data in the following sections:
 
-## 🎨 界面特色
+#### Competitive Overview
+4 key competitive metrics displayed as cards:
+- **Price Competitiveness**: Market price positioning (0-100 points)
+- **Quality Competitiveness**: Rating-based quality assessment (0-100 points)  
+- **Popularity**: Market popularity based on BSR ranking (0-100 points)
+- **Overall Competitiveness**: Comprehensive competitive strength (0-100 points)
 
-### 概覽卡片
-- 四大競爭力指標的即時顯示
-- 彩色圖標和評分系統
-- 直觀的市場定位說明
+#### Basic Performance Analysis
+- **Price Comparison**: Visual comparison of main product vs competitors
+- **Rating Comparison**: Bubble chart showing rating vs review count relationship
 
-### 互動式圖表
-- **價格比較圖**: 清晰對比主產品vs競品價格
-- **評分氣泡圖**: 同時展示評分和評論數量關係
-- **競爭指數條**: 動態展示各項競爭力指標
+#### Advanced Analysis
+- **Amazon Ranking Analysis**: BSR ranking performance across categories
+  - Shows main product rank, market position, best rank, average rank
+  - Time period: Past 30 days data analysis
 
-### SWOT分析面板
-- 四象限清晰展示優勢、劣勢、機會、威脅
-- 顏色編碼便於快速識別
-- AI生成的專業分析內容
+#### AI Intelligent Analysis Report
+- **Executive Summary**: AI-generated competitive positioning overview
+- **SWOT Analysis**: Systematic analysis of Strengths, Weaknesses, Opportunities, Threats
+- **Strategic Recommendations**: Actionable business recommendations with priority levels
+- **Market Insights**: Market dynamics, competitive landscape, trend analysis
 
-### 策略建議區
-- 按優先級分類的行動建議
-- 詳細的執行理由和預期影響
-- 可執行的商業策略指導
+### 4. Data Refresh
+- Click the "Refresh Analysis" button to get latest data
+- Analysis may take 30-60 seconds depending on data availability
 
-## 🔄 即時更新
+## 🎯 Dashboard Components
 
-- 點擊「重新分析」按鈕獲取最新數據
-- 系統將調用API重新執行競品分析
-- 包含最新的LLM智能報告
+### Header Section
+- **Title**: Amazon Insights branding
+- **Refresh Button**: Trigger new analysis
+- **Group Selector**: Switch between different competitive groups
 
-## 📱 響應式支援
+### Overview Cards
+Display key competitive metrics with visual indicators:
+- Green: Strong performance
+- Orange: Moderate performance  
+- Red: Needs improvement
 
-- 桌面電腦: 完整多欄佈局
-- 平板電腦: 自適應兩欄佈局
-- 手機: 單欄垂直佈局
-- 所有裝置都保持完整功能
+### Chart Sections
+- **Price Chart**: Bar chart comparing prices across products
+- **Rating Chart**: Bubble chart showing rating-review relationship
+- **Chart Fallback**: Automatic fallback when Chart.js fails to load
 
-## ⚡ 性能特色
+### Analysis Reports
+- **Structured Data**: Organized display of competitive analysis
+- **AI Reports**: Natural language insights and recommendations
+- **Interactive Elements**: Expandable sections and dynamic content
 
-- 快速載入和渲染
-- 平滑的動畫效果
-- 智能緩存機制
-- 優雅的錯誤處理
+## ⚡ Performance Features
 
-## 🎯 Demo建議
+### Caching System
+- Analysis results cached for optimal performance
+- Smart refresh mechanism to avoid unnecessary API calls
+- Loading states to indicate data processing
 
-### 展示流程
-1. **開場**: 展示專業的儀表板界面
-2. **基礎分析**: 價格和評分對比圖表
-3. **進階指標**: 競爭指數和排名分析
-4. **AI洞察**: SWOT分析和策略建議
-5. **互動體驗**: 切換不同競品組進行比較
+### Error Handling
+- Graceful fallbacks when Chart.js unavailable
+- Clear error messages for troubleshooting
+- Automatic retry mechanisms
 
-### 重點強調
-- AI驅動的深度分析
-- 多維度競爭情報
-- 可執行的商業策略
-- 專業級數據可視化
+### Mobile Optimization
+- Responsive design for all screen sizes
+- Touch-friendly interface elements
+- Optimized chart rendering for mobile
 
----
+## 🚨 Troubleshooting
 
-*🤖 Powered by Amazon Insights AI Engine*
+### Common Issues
+
+1. **Dashboard doesn't load**
+   - Check if API server is running on port 8001
+   - Verify frontend server is running on port 8080
+   - Check browser console for JavaScript errors
+
+2. **No competitive groups shown**
+   - Create competitive groups using API first
+   - Ensure products are tracked in the system
+   - Check API connectivity
+
+3. **Charts not displaying**
+   - Check internet connection (Chart.js CDN)
+   - Charts will show fallback text if libraries fail
+   - Refresh page to retry chart loading
+
+4. **Analysis taking too long**
+   - Wait up to 2 minutes for complex analysis
+   - Check API server logs for processing status
+   - Ensure all competitor ASINs are valid
+
+### Debug Steps
+1. Open browser developer tools (F12)
+2. Check Console tab for error messages
+3. Check Network tab for API request status
+4. Verify API server status at http://localhost:8001/docs
+
+## 🎨 Customization
+
+### Styling
+Modify `frontend/styles.css` to customize:
+- Color schemes and themes
+- Layout and spacing
+- Chart styling
+- Animation effects
+
+### Functionality  
+Extend `frontend/script.js` to add:
+- Additional chart types
+- Custom analysis sections
+- Enhanced user interactions
+- Export capabilities
+
+### API Integration
+The dashboard consumes these main APIs:
+- `/api/v1/competitive/groups` - Get competitive groups
+- `/api/v1/competitive/groups/{id}/analyze` - Run analysis
+- Chart data is processed client-side for optimal rendering
+
+## 📱 Browser Compatibility
+
+### Supported Browsers
+- Chrome 90+ (Recommended)
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+### Features Used
+- ES6+ JavaScript
+- CSS Grid and Flexbox
+- Chart.js 4.x
+- Fetch API
+- Modern CSS animations
+
+## 🔄 Data Flow
+
+1. **User selects competitive group** → Frontend requests group data
+2. **Frontend triggers analysis** → API processes competitive data  
+3. **API returns results** → Frontend renders charts and insights
+4. **User interacts with data** → Dynamic updates and visualizations
+5. **Refresh cycle** → Updated analysis with latest market data
+
+## 📈 Analytics Metrics
+
+The dashboard tracks and displays:
+- **Price Competitiveness**: Relative pricing position in market
+- **Quality Scores**: Customer satisfaction metrics
+- **Market Position**: BSR ranking analysis  
+- **Feature Comparison**: Product differentiation analysis
+- **Trend Data**: Historical performance indicators
+- **AI Insights**: Strategic recommendations and market analysis
+
+This dashboard provides a comprehensive view of competitive positioning to support data-driven business decisions.

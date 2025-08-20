@@ -1,134 +1,210 @@
-# Postman 測試指南
+# Postman Testing Guide
 
-## 匯入 Postman 集合
+## Import Postman Collection
 
-1. 開啟 Postman
-2. 點選 "Import" 按鈕
-3. 選擇 `postman_collection.json` 檔案
-4. 匯入完成後，你會看到 "Amazon Insights API" 集合
+1. Open Postman
+2. Click the "Import" button
+3. Select the `postman_collection.json` file
+4. After import, you'll see the "Amazon Insights API" collection
 
-## 環境變數
+## Environment Variables
 
-集合已經預設配置了 `baseUrl` 變數：
+The collection is pre-configured with the `baseUrl` variable:
 - **baseUrl**: `http://localhost:8001`
 
-如果需要修改端口，可以在 Postman 的環境變數中調整。
+If you need to modify the port, adjust it in Postman's environment variables.
 
-## 建議的測試順序
+## Recommended Testing Order
 
-### 1. 基本健康檢查
+### 1. Basic Health Check
 ```
 GET {{baseUrl}}/health
 ```
-預期回應：
+Expected response:
 ```json
 {
     "status": "healthy"
 }
 ```
 
-### 2. 系統狀態檢查
+### 2. System Status Check
 ```
 GET {{baseUrl}}/api/v1/system/status
 ```
-預期回應：包含系統狀態、資料庫連線狀態、Firecrawl 可用性等資訊
+Expected response: Contains system status, database connection status, Firecrawl availability, and other information
 
-### 3. 查看監控清單
+### 3. View Monitoring List
 ```
 GET {{baseUrl}}/api/v1/products/list
 ```
-預期回應：返回 10 個預設監控的 ASIN
+Expected response: Returns 10 default monitored ASINs
 
-### 4. 取得已有資料的產品摘要
+### 4. Get Product Summary with Existing Data
 ```
 GET {{baseUrl}}/api/v1/products/summary/B07R7RMQF5
 ```
-這個 ASIN 應該已經有資料，因為我們之前測試過
+This ASIN should have data since we've tested it before
 
-### 5. 查看產品歷史
+### 5. View Product History
 ```
 GET {{baseUrl}}/api/v1/products/history/B07R7RMQF5?limit=10
 ```
-顯示該產品的價格歷史記錄
+Expected response: Historical price data for the product
 
-### 6. 追蹤單一產品
-```
-POST {{baseUrl}}/api/v1/products/track/B07R7RMQF5
-```
-重新追蹤已知的產品（較快成功）
-
-### 7. 查看警報摘要
+### 6. Get Alert Summary
 ```
 GET {{baseUrl}}/api/v1/alerts/?hours=24
 ```
-查看最近 24 小時的警報
+Expected response: Recent alert summary
 
-### 8. 查看所有產品摘要
+### 7. Test Cache Information
 ```
-GET {{baseUrl}}/api/v1/products/summary
+GET {{baseUrl}}/api/v1/cache/info
 ```
-取得所有產品的摘要資訊
+Expected response: Redis cache status and information
 
-## 注意事項
+### 8. Track Single Product (May take time)
+```
+POST {{baseUrl}}/api/v1/products/track/B07R7RMQF5
+```
+⚠️ Note: This request may take 30-60 seconds as it fetches real data from Amazon
 
-1. **API 限制**: Firecrawl API 在免費方案下有限制，可能會遇到超時
-2. **追蹤新產品**: 第一次追蹤新的 ASIN 可能需要較長時間或失敗
-3. **已有資料**: B07R7RMQF5 已經有歷史資料，測試時較為穩定
+### 9. Track All Products (Takes longest time)
+```
+POST {{baseUrl}}/api/v1/products/track-all
+```
+⚠️ Note: This will take several minutes as it tracks all configured products
 
-## 常見回應格式
+### 10. System Test
+```
+POST {{baseUrl}}/api/v1/system/test
+```
+Expected response: Comprehensive system component test results
 
-### 成功的產品摘要
+## Expected Response Formats
+
+### Product Summary
 ```json
 {
-    "asin": "B07R7RMQF5",
-    "title": "Product summary presents key product information",
-    "current_price": 34.99,
-    "current_rating": 4.7,
-    "current_review_count": 18451,
-    "bsr_data": {
-        "Sports & Outdoors": 1776,
-        "[Exercise Mats]": 3,
-        "[Yoga Mats]": 18
-    },
-    "availability": "In Stock",
-    "price_trend": "stable",
-    "last_updated": "2025-08-20T16:58:33.548102",
-    "history_count": 3
+  "asin": "B07R7RMQF5",
+  "title": "Yoga Mat 1-Inch Extra Thick...",
+  "current_price": 34.99,
+  "current_rating": 4.7,
+  "current_review_count": 18451,
+  "bsr_data": {
+    "Sports & Outdoors": 1776,
+    "[Exercise Mats]": 3,
+    "[Yoga Mats]": 18
+  },
+  "availability": "In Stock",
+  "price_trend": "stable",
+  "last_updated": "2025-08-20T16:56:40.305805",
+  "history_count": 2
 }
 ```
 
-### 追蹤結果
+### Tracking Result
 ```json
 {
-    "success": true,
-    "message": "Successfully tracked product B07R7RMQF5",
-    "asin": "B07R7RMQF5",
-    "product_summary": {
-        // ProductSummary 物件
-    }
+  "success": true,
+  "message": "Successfully tracked product B07R7RMQF5",
+  "asin": "B07R7RMQF5",
+  "product_summary": {
+    // ProductSummary object
+  }
 }
 ```
 
-### 系統狀態
-```json
-{
-    "status": "healthy",
-    "database_connected": true,
-    "firecrawl_available": true,
-    "monitored_asins": ["B07R7RMQF5", "B092XMWXK7", ...],
-    "last_check": "2025-08-20T17:09:51.589730"
-}
+## Error Scenarios to Test
+
+### 1. Invalid ASIN
 ```
+GET {{baseUrl}}/api/v1/products/summary/INVALIDASIN
+```
+Expected: 404 or 500 error
 
-## 故障排除
+### 2. Non-existent Product History
+```
+GET {{baseUrl}}/api/v1/products/history/NONEXISTENT
+```
+Expected: Empty history or appropriate error message
 
-1. **連接錯誤**: 確認 API 服務器正在運行 (`python3 start_api.py`)
-2. **404 錯誤**: 檢查 URL 路徑是否正確
-3. **500 錯誤**: 查看服務器日誌以了解詳細錯誤資訊
-4. **超時錯誤**: Firecrawl API 限制，稍後再試
+### 3. Invalid Cache Pattern
+```
+POST {{baseUrl}}/api/v1/cache/clear/invalid-pattern-test
+```
+Expected: Appropriate error handling
 
-## API 文件
+## Performance Testing
 
-完整的 API 文件可在以下位置查看：
-- **Swagger UI**: http://localhost:8001/docs
-- **ReDoc**: http://localhost:8001/redoc
+### Expected Response Times
+- Health check: < 100ms
+- Product summary (cached): < 200ms
+- Product summary (uncached): < 500ms
+- Single product tracking: 30-60 seconds
+- Batch tracking: 5-15 minutes
+
+### Cache Testing Workflow
+1. Clear specific product cache:
+   ```
+   POST {{baseUrl}}/api/v1/cache/clear/product/B07R7RMQF5
+   ```
+
+2. Request product summary (should be slow):
+   ```
+   GET {{baseUrl}}/api/v1/products/summary/B07R7RMQF5
+   ```
+
+3. Request same summary again (should be fast):
+   ```
+   GET {{baseUrl}}/api/v1/products/summary/B07R7RMQF5
+   ```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Server Not Running**
+   - Error: Connection refused
+   - Solution: Start API server with `python3 start_api.py`
+
+2. **Redis Not Available**
+   - Error: Cache-related endpoints fail
+   - Solution: Start Redis service
+
+3. **Firecrawl API Issues**
+   - Error: Tracking requests fail
+   - Solution: Check FIRECRAWL_API_KEY environment variable
+
+4. **Database Issues**
+   - Error: Product summary endpoints fail
+   - Solution: Check database file permissions
+
+### Debug Information
+
+Enable detailed logging by checking:
+- API server console output
+- `logs/` directory for log files
+- System status endpoint for component health
+
+## Advanced Testing
+
+### Load Testing
+Test concurrent requests using Postman's Collection Runner:
+1. Select the collection
+2. Set iterations to 10+
+3. Add delay between requests
+4. Monitor system performance
+
+### Automation
+Set up automated tests using Postman's testing scripts:
+```javascript
+// Example test script for product summary
+pm.test("Product summary returns valid data", function () {
+    pm.response.to.have.status(200);
+    const response = pm.response.json();
+    pm.expect(response).to.have.property('asin');
+    pm.expect(response).to.have.property('title');
+    pm.expect(response.current_price).to.be.a('number');
+});
+```

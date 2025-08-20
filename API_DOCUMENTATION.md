@@ -1,204 +1,204 @@
 # Amazon Insights RESTful API
 
-## 啟動 API 服務器
+## Starting API Server
 
 ```bash
 python3 start_api.py
 ```
 
-API 服務器將在 `http://localhost:8001` 啟動
+API server will start at `http://localhost:8001`
 
-## API 文件
+## API Documentation
 
 - **Swagger UI**: http://localhost:8001/docs
 - **ReDoc**: http://localhost:8001/redoc
 - **Health Check**: http://localhost:8001/health
 - **Postman Collection**: [postman_collection.json](postman_collection.json)
 
-## API 端點
+## API Endpoints
 
-### 1. 產品追蹤 (Products)
+### 1. Product Tracking (Products)
 
-#### 追蹤單一產品
+#### Track Single Product
 - **URL**: `POST /api/v1/products/track/{asin}`
-- **描述**: 追蹤指定 ASIN 的產品
-- **參數**: 
-  - `asin` (path): Amazon ASIN (例如: B07R7RMQF5)
-- **回應**: TrackingResult
+- **Description**: Track a specific product by ASIN
+- **Parameters**: 
+  - `asin` (path): Amazon ASIN (e.g.: B07R7RMQF5)
+- **Response**: TrackingResult
 
 ```bash
-# 範例
+# Example
 POST http://localhost:8001/api/v1/products/track/B07R7RMQF5
 ```
 
-#### 追蹤所有產品
+#### Track All Products
 - **URL**: `POST /api/v1/products/track-all`
-- **描述**: 追蹤所有配置的產品
-- **回應**: BatchTrackingResult
+- **Description**: Track all configured products
+- **Response**: BatchTrackingResult
 
 ```bash
 POST http://localhost:8001/api/v1/products/track-all
 ```
 
-#### 取得產品摘要
+#### Get Product Summary
 - **URL**: `GET /api/v1/products/summary/{asin}`
-- **描述**: 取得指定產品的摘要資訊
-- **參數**: 
+- **Description**: Get summary information for a specific product
+- **Parameters**: 
   - `asin` (path): Amazon ASIN
-- **回應**: ProductSummary
+- **Response**: ProductSummary
 
 ```bash
 GET http://localhost:8001/api/v1/products/summary/B07R7RMQF5
 ```
 
-#### 取得所有產品摘要
+#### Get All Product Summaries
 - **URL**: `GET /api/v1/products/summary`
-- **描述**: 取得所有產品的摘要資訊
-- **回應**: List[ProductSummary]
+- **Description**: Get summary information for all products
+- **Response**: List[ProductSummary]
 
 ```bash
 GET http://localhost:8001/api/v1/products/summary
 ```
 
-#### 取得產品歷史
+#### Get Product History
 - **URL**: `GET /api/v1/products/history/{asin}`
-- **描述**: 取得指定產品的價格歷史
-- **參數**: 
+- **Description**: Get price history for a specific product
+- **Parameters**: 
   - `asin` (path): Amazon ASIN
-  - `limit` (query, optional): 限制回傳筆數 (預設: 20)
-- **回應**: PriceHistory
+  - `limit` (query, optional): Limit number of records (default: 20)
+- **Response**: PriceHistory
 
 ```bash
 GET http://localhost:8001/api/v1/products/history/B07R7RMQF5?limit=10
 ```
 
-#### 取得監控清單
+#### Get Monitoring List
 - **URL**: `GET /api/v1/products/list`
-- **描述**: 取得所有監控的 ASIN 清單
-- **回應**: List[str]
+- **Description**: Get list of all monitored ASINs
+- **Response**: List[str]
 
 ```bash
 GET http://localhost:8001/api/v1/products/list
 ```
 
-### 2. 警報 (Alerts)
+### 2. Alerts
 
-#### 取得警報摘要
+#### Get Alert Summary
 - **URL**: `GET /api/v1/alerts/`
-- **描述**: 取得最近的警報摘要
-- **參數**: 
-  - `hours` (query, optional): 時間範圍 (預設: 24)
-- **回應**: AlertsSummary
+- **Description**: Get recent alert summary
+- **Parameters**: 
+  - `hours` (query, optional): Time range in hours (default: 24)
+- **Response**: AlertsSummary
 
 ```bash
 GET http://localhost:8001/api/v1/alerts/?hours=48
 ```
 
-#### 取得最近警報
+#### Get Recent Alerts
 - **URL**: `GET /api/v1/alerts/recent`
-- **描述**: 取得最近的警報清單
-- **參數**: 
-  - `hours` (query, optional): 時間範圍 (預設: 24)
-  - `limit` (query, optional): 限制回傳筆數 (預設: 50)
-- **回應**: List[Alert]
+- **Description**: Get list of recent alerts
+- **Parameters**: 
+  - `hours` (query, optional): Time range in hours (default: 24)
+  - `limit` (query, optional): Limit number of records (default: 50)
+- **Response**: List[Alert]
 
 ```bash
 GET http://localhost:8001/api/v1/alerts/recent?hours=24&limit=10
 ```
 
-#### 取得特定產品警報
+#### Get Product-Specific Alerts
 - **URL**: `GET /api/v1/alerts/{asin}`
-- **描述**: 取得指定 ASIN 的警報
-- **參數**: 
+- **Description**: Get alerts for a specific ASIN
+- **Parameters**: 
   - `asin` (path): Amazon ASIN
-  - `hours` (query, optional): 時間範圍 (預設: 24)
-- **回應**: List[Alert]
+  - `hours` (query, optional): Time range in hours (default: 24)
+- **Response**: List[Alert]
 
 ```bash
 GET http://localhost:8001/api/v1/alerts/B07R7RMQF5?hours=24
 ```
 
-### 3. 系統 (System)
+### 3. System
 
-#### 系統狀態
+#### System Status
 - **URL**: `GET /api/v1/system/status`
-- **描述**: 取得系統狀態
-- **回應**: SystemStatus
+- **Description**: Get system status
+- **Response**: SystemStatus
 
 ```bash
 GET http://localhost:8001/api/v1/system/status
 ```
 
-#### 健康檢查
+#### Health Check
 - **URL**: `GET /api/v1/system/health`
-- **描述**: 簡單的健康檢查
-- **回應**: JSON
+- **Description**: Simple health check
+- **Response**: JSON
 
 ```bash
 GET http://localhost:8001/api/v1/system/health
 ```
 
-#### 系統測試
+#### System Test
 - **URL**: `POST /api/v1/system/test`
-- **描述**: 測試系統各個組件
-- **回應**: JSON
+- **Description**: Test system components
+- **Response**: JSON
 
 ```bash
 POST http://localhost:8001/api/v1/system/test
 ```
 
-### 4. 快取管理 (Cache)
+### 4. Cache Management
 
-#### 查看快取資訊
+#### View Cache Information
 - **URL**: `GET /api/v1/cache/info`
-- **描述**: 取得 Redis 快取系統資訊
-- **回應**: JSON
+- **Description**: Get Redis cache system information
+- **Response**: JSON
 
 ```bash
 GET http://localhost:8001/api/v1/cache/info
 ```
 
-#### 快取統計
+#### Cache Statistics
 - **URL**: `GET /api/v1/cache/stats`
-- **描述**: 取得詳細快取統計資訊
-- **回應**: JSON
+- **Description**: Get detailed cache statistics
+- **Response**: JSON
 
 ```bash
 GET http://localhost:8001/api/v1/cache/stats
 ```
 
-#### 清除所有快取
+#### Clear All Cache
 - **URL**: `POST /api/v1/cache/clear/all`
-- **描述**: 清除所有快取資料
-- **回應**: JSON
+- **Description**: Clear all cache data
+- **Response**: JSON
 
 ```bash
 POST http://localhost:8001/api/v1/cache/clear/all
 ```
 
-#### 清除特定產品快取
+#### Clear Product-Specific Cache
 - **URL**: `POST /api/v1/cache/clear/product/{asin}`
-- **描述**: 清除指定產品的所有相關快取
-- **參數**: 
+- **Description**: Clear all cache related to a specific product
+- **Parameters**: 
   - `asin` (path): Amazon ASIN
-- **回應**: JSON
+- **Response**: JSON
 
 ```bash
 POST http://localhost:8001/api/v1/cache/clear/product/B07R7RMQF5
 ```
 
-#### 清除模式快取
+#### Clear Pattern-Based Cache
 - **URL**: `POST /api/v1/cache/clear/{pattern}`
-- **描述**: 清除符合模式的快取鍵
-- **參數**: 
-  - `pattern` (path): 搜尋模式
-- **回應**: JSON
+- **Description**: Clear cache keys matching a pattern
+- **Parameters**: 
+  - `pattern` (path): Search pattern
+- **Response**: JSON
 
 ```bash
 POST http://localhost:8001/api/v1/cache/clear/product
 ```
 
-## 資料結構
+## Data Structures
 
 ### ProductSummary
 ```json
@@ -246,48 +246,48 @@ POST http://localhost:8001/api/v1/cache/clear/product
 }
 ```
 
-## Postman 測試集合
+## Postman Test Collection
 
-建議建立以下 Postman 請求：
+Recommended Postman requests to create:
 
 1. **Health Check**
    - GET http://localhost:8001/health
 
-2. **系統狀態**
+2. **System Status**
    - GET http://localhost:8001/api/v1/system/status
 
-3. **追蹤單一產品**
+3. **Track Single Product**
    - POST http://localhost:8001/api/v1/products/track/B07R7RMQF5
 
-4. **取得產品摘要**
+4. **Get Product Summary**
    - GET http://localhost:8001/api/v1/products/summary/B07R7RMQF5
 
-5. **取得產品歷史**
+5. **Get Product History**
    - GET http://localhost:8001/api/v1/products/history/B07R7RMQF5
 
-6. **取得警報摘要**
+6. **Get Alert Summary**
    - GET http://localhost:8001/api/v1/alerts/
 
-7. **追蹤所有產品**
+7. **Track All Products**
    - POST http://localhost:8001/api/v1/products/track-all
 
-## 錯誤處理
+## Error Handling
 
-API 使用標準的 HTTP 狀態碼：
+API uses standard HTTP status codes:
 
-- `200`: 成功
-- `404`: 資源未找到
-- `500`: 內部服務器錯誤
+- `200`: Success
+- `404`: Resource not found
+- `500`: Internal server error
 
-錯誤回應格式：
+Error response format:
 ```json
 {
   "error": "Internal Server Error",
   "message": "An unexpected error occurred",
-  "details": "具體錯誤信息"
+  "details": "Specific error information"
 }
 ```
 
-## CORS 設定
+## CORS Configuration
 
-API 已設定允許所有來源的跨域請求，適合開發環境使用。在生產環境中應該限制允許的來源。
+The API is configured to allow cross-origin requests from all origins, suitable for development environment. In production, allowed origins should be restricted.

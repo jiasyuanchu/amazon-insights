@@ -1,229 +1,329 @@
-# 競品分析引擎使用指南
+# Competitive Analysis Engine User Guide
 
-## 🚀 功能概述
+## 🚀 Feature Overview
 
-Amazon Insights 競品分析引擎提供全面的多維度競品比較分析：
+Amazon Insights Competitive Analysis Engine provides comprehensive multi-dimensional competitor comparison analysis:
 
-### 核心功能
-- **主產品設定**: 設定賣家自己的產品作為基準
-- **競品管理**: 添加 3-5 個競品進行對比分析
-- **多維度分析**:
-  - 價格差異分析與定位
-  - BSR (Best Sellers Rank) 排名對比
-  - 評分與評論數優劣勢
-  - 產品特色對比 (從 bullet points 提取)
-- **LLM 智能報告**: 使用 OpenAI GPT 生成競爭定位報告
-- **API 完整支援**: 提供完整的 REST API 接口
+### Core Features
+- **Main Product Setup**: Set seller's own product as baseline
+- **Competitor Management**: Add 3-5 competitors for comparative analysis
+- **Multi-dimensional Analysis**:
+  - Price difference analysis and positioning
+  - BSR (Best Sellers Rank) ranking comparison
+  - Rating and review count advantages/disadvantages
+  - Product feature comparison (extracted from bullet points)
+- **LLM Intelligent Reports**: Generate competitive positioning reports using OpenAI GPT
+- **Complete API Support**: Provides comprehensive REST API interfaces
 
-## 📋 前置需求
+## 📋 Prerequisites
 
-### 1. 環境設定
+### 1. Environment Setup
 ```bash
-# 安裝依賴
+# Install dependencies
 pip install -r requirements.txt
 
-# 設定 OpenAI API Key (可選，沒有則使用結構化分析)
+# Set OpenAI API Key (optional, uses structured analysis if not provided)
 export OPENAI_API_KEY="your-openai-api-key"
 ```
 
-### 2. 追蹤設定
-確保要分析的產品都在追蹤列表中：
+### 2. Tracking Setup
+Ensure all products to be analyzed are in the tracking list:
 ```python
 # config/config.py
 AMAZON_ASINS = [
-    "B07R7RMQF5",  # 主產品
-    "B092XMWXK7",  # 競品1
-    "B0BVY8K28Q",  # 競品2
-    "B0CSMV2DTV",  # 競品3
+    "B07R7RMQF5",  # Main product
+    "B092XMWXK7",  # Competitor 1
+    "B0BVY8K28Q",  # Competitor 2
+    "B0CSMV2DTV",  # Competitor 3
 ]
 ```
 
-## 🔧 使用方式
+## 🔧 Usage Methods
 
-### 方式一：API 快速設定 (推薦)
+### Method 1: API Quick Setup (Recommended)
 ```bash
-curl -X POST "http://localhost:8000/api/v1/competitive/quick-setup" \
+curl -X POST "http://localhost:8001/api/v1/competitive/quick-setup" \
   -H "Content-Type: application/json" \
   -d '{
     "main_product_asin": "B07R7RMQF5",
     "competitor_asins": ["B092XMWXK7", "B0BVY8K28Q", "B0CSMV2DTV"],
-    "group_name": "瑜伽墊市場競品分析",
-    "description": "針對高端瑜伽墊市場的競爭對手分析"
+    "group_name": "Yoga Mat Market Competitive Analysis",
+    "description": "Analysis of yoga mat market competition"
   }'
 ```
 
-### 方式二：逐步建立
+### Method 2: Step-by-Step Setup
+
+#### Step 1: Create Competitive Group
 ```bash
-# 1. 建立競品組
-curl -X POST "http://localhost:8000/api/v1/competitive/groups" \
+curl -X POST "http://localhost:8001/api/v1/competitive/groups" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "瑜伽墊競品分析",
+    "name": "Yoga Mat Market Analysis",
     "main_product_asin": "B07R7RMQF5",
-    "description": "瑜伽墊市場競爭分析"
+    "description": "Comprehensive yoga mat market competitive analysis"
   }'
+```
 
-# 2. 添加競品 (使用返回的 group_id)
-curl -X POST "http://localhost:8000/api/v1/competitive/groups/1/competitors" \
+#### Step 2: Add Competitors
+```bash
+# Add Competitor 1
+curl -X POST "http://localhost:8001/api/v1/competitive/groups/1/competitors" \
   -H "Content-Type: application/json" \
   -d '{
     "asin": "B092XMWXK7",
-    "competitor_name": "高端瑜伽墊 A",
+    "competitor_name": "Premium Yoga Mat",
     "priority": 1
   }'
+
+# Add more competitors...
 ```
 
-### 方式三：Python 腳本
+#### Step 3: Run Analysis
 ```bash
-# 執行展示腳本
-python demo_competitive_workflow.py
+curl -X POST "http://localhost:8001/api/v1/competitive/groups/1/analyze?include_llm_report=true"
 ```
 
-## 📊 執行分析
+## 📊 Analysis Results
 
-### 1. 基礎分析
+### Basic Analysis Data
+```json
+{
+  "group_info": {
+    "id": 1,
+    "name": "Yoga Mat Market Analysis",
+    "main_product_asin": "B07R7RMQF5"
+  },
+  "main_product": {
+    "asin": "B07R7RMQF5",
+    "title": "Yoga Mat 1-Inch Extra Thick...",
+    "price": 34.99,
+    "rating": 4.7,
+    "review_count": 18451
+  },
+  "competitors": [...],
+  "competitive_summary": {
+    "competitive_scores": {
+      "price_competitiveness": 75.2,
+      "quality_competitiveness": 94.0,
+      "popularity_competitiveness": 82.3,
+      "overall_competitiveness": 83.8
+    }
+  }
+}
+```
+
+### LLM Analysis Report
+```json
+{
+  "positioning_report": {
+    "executive_summary": "Your product shows strong market positioning...",
+    "strengths_weaknesses": {
+      "strengths": ["Superior customer satisfaction", "Competitive pricing"],
+      "weaknesses": ["Limited feature differentiation"],
+      "opportunities": ["Premium market segment expansion"],
+      "threats": ["Increasing price competition"]
+    },
+    "strategic_recommendations": [
+      {
+        "category": "pricing",
+        "priority": "high",
+        "action": "Consider price optimization strategy",
+        "rationale": "Current price positioning analysis suggests...",
+        "expected_impact": "15-20% improvement in market competitiveness"
+      }
+    ]
+  }
+}
+```
+
+## 🎯 Competitive Scoring System
+
+### Price Competitiveness (0-100)
+- **100 points**: Lowest price in market
+- **75-99 points**: Competitive pricing
+- **50-74 points**: Average market pricing
+- **25-49 points**: Above average pricing
+- **0-24 points**: Premium pricing
+
+**Formula**: `(2 - price_ratio) * 50`
+Where `price_ratio = main_product_price / average_competitor_price`
+
+### Quality Competitiveness (0-100)
+- **100 points**: 5.0 star rating
+- **80 points**: 4.0 star rating
+- **60 points**: 3.0 star rating
+- **40 points**: 2.0 star rating
+- **20 points**: 1.0 star rating
+
+**Formula**: `(rating / 5.0) * 100`
+
+### Popularity Competitiveness (0-100)
+Based on Amazon BSR (Best Seller Rank):
+- **Higher scores**: Better (lower) BSR ranking
+- **Calculation**: Relative ranking compared to competitors
+
+## 🖥️ Dashboard Interface
+
+### Starting the Dashboard
 ```bash
-curl -X POST "http://localhost:8000/api/v1/competitive/groups/1/analyze"
+# Start API server
+python3 start_api.py
+
+# Start frontend server (separate terminal)
+python3 frontend_server.py
 ```
 
-### 2. 包含 LLM 報告的完整分析
+Access dashboard at: `http://localhost:8080`
+
+### Dashboard Features
+- **Real-time Analysis**: Live competitive data updates
+- **Interactive Charts**: Price trends and rating comparisons
+- **SWOT Analysis Visualization**: AI-generated strategic insights
+- **Export Capabilities**: PDF reports and data export
+
+## 📈 Advanced Features
+
+### Trend Analysis
 ```bash
-curl -X POST "http://localhost:8000/api/v1/competitive/groups/1/analyze?include_llm_report=true"
+curl "http://localhost:8001/api/v1/competitive/groups/1/trends?days=30"
 ```
 
-### 3. 獲取詳細定位報告
+### Batch Analysis
 ```bash
-curl -X GET "http://localhost:8000/api/v1/competitive/groups/1/report"
+curl -X POST "http://localhost:8001/api/v1/competitive/batch-analysis"
 ```
 
-## 📈 分析結果說明
-
-### 價格分析 (Price Analysis)
-- **價格定位**: lowest/middle/highest
-- **價格優勢**: 是否具有價格競爭力
-- **市場價格區間**: 最低價、最高價、平均價
-- **競品價格差異**: 與各競品的價格差距百分比
-
-### BSR 排名分析 (BSR Analysis)
-- **各類別排名**: 在不同 Amazon 類別中的排名
-- **排名定位**: best/middle/worst
-- **排名統計**: 最佳排名、平均排名、排名分布
-
-### 評分分析 (Rating Analysis)
-- **質量定位**: 評分在市場中的相對位置
-- **評分優勢**: 是否高於市場平均
-- **評論數量**: 受歡迎程度指標
-- **質量vs受歡迎度**: 綜合評估產品市場表現
-
-### 特色分析 (Feature Analysis)
-- **獨特特色**: 只有主產品具有的特色
-- **共同特色**: 市場標準特色
-- **缺失特色**: 競品有但主產品沒有的特色
-- **特色豐富度**: 特色數量與市場比較
-
-### 競爭評分 (Competitive Scores)
-- **整體競爭力**: 0-100 分綜合評分
-- **價格競爭力**: 價格優勢評分
-- **質量競爭力**: 評分與評論優勢評分
-- **受歡迎度競爭力**: BSR 排名優勢評分
-
-## 🤖 LLM 智能報告
-
-當設定 OpenAI API Key 後，系統會生成包含以下內容的智能報告：
-
-### 執行摘要 (Executive Summary)
-- 市場定位概述
-- 整體競爭態勢
-- 關鍵優劣勢總結
-
-### SWOT 分析
-- **Strengths**: 競爭優勢
-- **Weaknesses**: 需改進之處  
-- **Opportunities**: 市場機會
-- **Threats**: 競爭威脅
-
-### 策略建議 (Strategic Recommendations)
-- 定價策略建議
-- 產品改善建議
-- 市場定位建議
-- 特色開發建議
-
-### 市場洞察 (Market Insights)
-- 市場動態分析
-- 競爭格局評估
-- 趨勢預測
-
-## 🔄 批次操作
-
-### 批次分析所有競品組
+### System Summary
 ```bash
-curl -X POST "http://localhost:8000/api/v1/competitive/batch-analysis"
+curl "http://localhost:8001/api/v1/competitive/summary"
 ```
 
-### 系統總覽
+## 🔄 Workflow Examples
+
+### Daily Competitive Monitoring
 ```bash
-curl -X GET "http://localhost:8000/api/v1/competitive/summary"
+#!/bin/bash
+# daily_competitive_check.sh
+
+echo "Running daily competitive analysis..."
+
+# Get all active groups
+GROUPS=$(curl -s "http://localhost:8001/api/v1/competitive/groups" | jq '.[].id')
+
+# Analyze each group
+for group_id in $GROUPS; do
+    echo "Analyzing group $group_id..."
+    curl -X POST "http://localhost:8001/api/v1/competitive/groups/$group_id/analyze?include_llm_report=true" \
+         > "reports/competitive_analysis_group_${group_id}_$(date +%Y%m%d).json"
+done
+
+echo "Analysis complete. Reports saved to reports/ directory."
 ```
 
-## 📋 管理功能
-
-### 查看所有競品組
+### Price Alert Integration
 ```bash
-curl -X GET "http://localhost:8000/api/v1/competitive/groups"
+# Check if main product loses price competitiveness
+ANALYSIS=$(curl -s -X POST "http://localhost:8001/api/v1/competitive/groups/1/analyze")
+PRICE_SCORE=$(echo $ANALYSIS | jq '.competitive_summary.competitive_scores.price_competitiveness')
+
+if (( $(echo "$PRICE_SCORE < 50" | bc -l) )); then
+    echo "Alert: Price competitiveness below 50%. Consider price adjustment."
+fi
 ```
 
-### 檢查追蹤狀態
+## 🎨 Customization
+
+### Adding Custom Metrics
+Extend the analyzer with custom competitive metrics:
+```python
+# src/competitive/analyzer.py
+def _analyze_custom_metric(self, main_product, competitors):
+    # Custom analysis logic
+    return {
+        "custom_score": calculated_score,
+        "reasoning": "Analysis explanation"
+    }
+```
+
+### Custom LLM Prompts
+Modify AI analysis prompts in:
+```python
+# src/competitive/llm_reporter.py
+def _create_analysis_prompt(self, analysis_data):
+    # Customize prompt for specific industry/product type
+    prompt = f"""
+    Analyze the following {industry_type} market data:
+    {analysis_data}
+    
+    Focus on {specific_analysis_aspects}...
+    """
+    return prompt
+```
+
+## ⚡ Performance Tips
+
+### Caching Strategy
+- Analysis results cached for 1 hour
+- Use `refresh=true` parameter to force new analysis
+- Clear cache for updated competitor data
+
+### Batch Processing
+- Use quick-setup for multiple groups
+- Batch analysis for daily reports
+- Schedule analysis during off-peak hours
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+1. **No competitor data found**
+   - Ensure ASINs are in tracking list
+   - Run product tracking first: `POST /api/v1/products/track-all`
+
+2. **LLM analysis fails**
+   - Check OpenAI API key configuration
+   - Fallback to structured analysis automatically
+
+3. **Analysis takes too long**
+   - Reduce number of competitors (3-5 optimal)
+   - Check network connectivity to Amazon
+
+### Debug Mode
 ```bash
-curl -X GET "http://localhost:8000/api/v1/competitive/groups/1/tracking-status"
+# Enable debug logging
+export LOG_LEVEL=DEBUG
+python3 start_api.py
 ```
 
-### 刪除競品組
-```bash
-curl -X DELETE "http://localhost:8000/api/v1/competitive/groups/1"
-```
+## 📚 API Reference
 
-## ⚡ 最佳實踐
+### Complete Endpoint List
+- `POST /api/v1/competitive/quick-setup` - One-click group setup
+- `GET /api/v1/competitive/groups` - List all groups
+- `POST /api/v1/competitive/groups/{id}/analyze` - Run analysis
+- `GET /api/v1/competitive/groups/{id}/report` - Get LLM report
+- `POST /api/v1/competitive/batch-analysis` - Analyze all groups
+- `GET /api/v1/competitive/summary` - System overview
 
-### 1. 競品選擇
-- 選擇 3-5 個直接競爭對手
-- 包含不同價格區間的產品
-- 選擇相似功能和目標市場的產品
+For complete API documentation, visit: `http://localhost:8001/docs`
 
-### 2. 數據品質
-- 確保所有產品都在追蹤系統中
-- 等待 24-48 小時收集完整數據
-- 定期更新分析以獲得最新洞察
+## 🎯 Use Cases
 
-### 3. 報告使用
-- 結合 LLM 報告和結構化分析
-- 關注趨勢變化而非單次數據點
-- 將洞察轉化為可執行的商業策略
+### E-commerce Sellers
+- Monitor competitor pricing strategies
+- Identify market positioning opportunities
+- Track product feature gaps
+- Generate strategic action plans
 
-## 🛠️ 故障排除
+### Market Researchers
+- Analyze market dynamics
+- Competitive landscape mapping
+- Trend identification
+- Performance benchmarking
 
-### 常見問題
-1. **分析失敗**: 檢查產品是否在追蹤列表中
-2. **數據不完整**: 等待更長時間收集數據
-3. **LLM 報告失敗**: 檢查 OpenAI API Key 設定
-4. **API 錯誤**: 檢查請求格式和參數
-
-### 日誌檢查
-```bash
-# 檢查系統日誌
-tail -f logs/competitive_analysis.log
-
-# 檢查 API 日誌  
-tail -f logs/api.log
-```
-
-## 📞 支援
-
-如遇問題請檢查：
-1. 系統日誌文件
-2. API 文檔 (`API_DOCUMENTATION.md`)
-3. 測試腳本輸出
-4. 數據庫連接狀態
-
----
-
-*競品分析引擎 v1.0 - 提供全面的 Amazon 產品競爭情報*
+### Product Managers
+- Feature development prioritization
+- Pricing strategy optimization
+- Market entry analysis
+- Competitive intelligence gathering
