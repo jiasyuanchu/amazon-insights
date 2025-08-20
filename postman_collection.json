@@ -1,0 +1,188 @@
+{
+    "info": {
+        "name": "Amazon Insights API",
+        "description": "Amazon 產品資料追蹤系統 API 測試集合",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8001",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Health Check",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/health",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["health"]
+                }
+            }
+        },
+        {
+            "name": "System Status",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/system/status",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "system", "status"]
+                }
+            }
+        },
+        {
+            "name": "System Test",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/system/test",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "system", "test"]
+                }
+            }
+        },
+        {
+            "name": "Get Monitored ASINs",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/products/list",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "products", "list"]
+                }
+            }
+        },
+        {
+            "name": "Track Single Product",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/products/track/B07R7RMQF5",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "products", "track", "B07R7RMQF5"]
+                }
+            }
+        },
+        {
+            "name": "Get Product Summary",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/products/summary/B07R7RMQF5",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "products", "summary", "B07R7RMQF5"]
+                }
+            }
+        },
+        {
+            "name": "Get All Products Summary",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/products/summary",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "products", "summary"]
+                }
+            }
+        },
+        {
+            "name": "Get Product History",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/products/history/B07R7RMQF5?limit=10",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "products", "history", "B07R7RMQF5"],
+                    "query": [
+                        {
+                            "key": "limit",
+                            "value": "10"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Track All Products",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/products/track-all",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "products", "track-all"]
+                }
+            }
+        },
+        {
+            "name": "Get Alerts Summary",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/alerts/?hours=24",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "alerts", ""],
+                    "query": [
+                        {
+                            "key": "hours",
+                            "value": "24"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Recent Alerts",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/alerts/recent?hours=24&limit=10",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "alerts", "recent"],
+                    "query": [
+                        {
+                            "key": "hours",
+                            "value": "24"
+                        },
+                        {
+                            "key": "limit",
+                            "value": "10"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Alerts by ASIN",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/v1/alerts/B07R7RMQF5?hours=24",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "v1", "alerts", "B07R7RMQF5"],
+                    "query": [
+                        {
+                            "key": "hours",
+                            "value": "24"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
