@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 # Add src directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
-from api.routes import products, alerts, system, cache, tasks
+from api.routes import products, alerts, system, cache, tasks, competitive
 
 # Create FastAPI app
 app = FastAPI(
@@ -36,6 +36,7 @@ app.include_router(alerts.router)
 app.include_router(system.router)
 app.include_router(cache.router)
 app.include_router(tasks.router)
+app.include_router(competitive.router)
 
 # Global exception handler
 @app.exception_handler(Exception)

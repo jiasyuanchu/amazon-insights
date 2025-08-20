@@ -7,6 +7,12 @@ from src.cache.redis_service import cache, CacheKeyBuilder, CACHE_LONG_TTL
 
 Base = declarative_base()
 
+# Import competitive models to ensure they're created
+try:
+    from src.models.competitive_models import CompetitiveGroup, Competitor, ProductFeatures, CompetitiveAnalysisReport, CompetitiveTrend
+except ImportError:
+    pass  # Models will be imported when needed
+
 class Product(Base):
     __tablename__ = 'products'
     

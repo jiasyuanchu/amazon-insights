@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Insights - Competitive Analysis Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-chart-line"></i> Amazon Insights</h1>
+                <p class="subtitle">AI-Powered Competitive Analysis Dashboard</p>
+            </div>
+            <div class="header-actions">
+                <button id="refreshBtn" class="btn btn-primary">
+                    <i class="fas fa-sync-alt"></i> Refresh Analysis
+                </button>
+                <select id="groupSelect" class="form-select">
+                    <option value="">Select Competitive Group...</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading competitive analysis data...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-state" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Failed to Load</h3>
+            <p id="errorMessage">Unable to load data. Please check API connection status.</p>
+            <button id="retryBtn" class="btn btn-primary">Retry</button>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="main-content" style="display: none;">
+            
+            <!-- Overview Cards -->
+            <div class="overview-section">
+                <h2><i class="fas fa-tachometer-alt"></i> Competitive Overview</h2>
+                <div class="cards-grid">
+                    <div class="card overview-card">
+                        <div class="card-icon price-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Price Competitiveness</h3>
+                            <div class="metric-value" id="priceScore">--</div>
+                            <div class="metric-label" id="pricePosition">--</div>
+                        </div>
+                    </div>
+                    <div class="card overview-card">
+                        <div class="card-icon quality-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Quality Competitiveness</h3>
+                            <div class="metric-value" id="qualityScore">--</div>
+                            <div class="metric-label" id="qualityPosition">--</div>
+                        </div>
+                    </div>
+                    <div class="card overview-card">
+                        <div class="card-icon popularity-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Popularity</h3>
+                            <div class="metric-value" id="popularityScore">--</div>
+                            <div class="metric-label" id="popularityPosition">--</div>
+                        </div>
+                    </div>
+                    <div class="card overview-card">
+                        <div class="card-icon overall-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Overall Competitiveness</h3>
+                            <div class="metric-value" id="overallScore">--</div>
+                            <div class="metric-label" id="overallPosition">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Basic Analysis -->
+            <div class="analysis-section">
+                <h2><i class="fas fa-chart-bar"></i> Basic Performance Analysis</h2>
+                
+                <!-- Price Comparison -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tags"></i> Price Comparison</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="price-comparison">
+                            <div class="main-product-price">
+                                <div class="product-info">
+                                    <h4 id="mainProductTitle">Main Product</h4>
+                                    <div class="price-badge main-price" id="mainPrice">$--</div>
+                                </div>
+                            </div>
+                            <div class="competitors-prices" id="competitorsPrices">
+                                <!-- Competitor prices will be inserted here -->
+                            </div>
+                        </div>
+                        <canvas id="priceChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Rating Comparison -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-star-half-alt"></i> Rating Comparison</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="ratingChart" width="400" height="200"></canvas>
+                        <div class="rating-stats" id="ratingStats">
+                            <!-- Rating statistics will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Analysis -->
+            <div class="advanced-section">
+                <h2><i class="fas fa-microscope"></i> Advanced Analysis</h2>
+                
+
+                <!-- BSR Analysis -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-ranking-star"></i> Amazon Ranking Analysis (Past 30 Days)</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="bsrAnalysis">
+                            <!-- BSR analysis will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LLM Report -->
+            <div class="report-section">
+                <h2><i class="fas fa-brain"></i> AI Intelligent Analysis Report</h2>
+                
+                <!-- Executive Summary -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-file-alt"></i> Executive Summary</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="executive-summary" id="executiveSummary">
+                            <!-- Executive summary will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SWOT Analysis -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-crosshairs"></i> SWOT Analysis</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="swot-grid">
+                            <div class="swot-item strengths">
+                                <h4><i class="fas fa-plus-circle"></i> Strengths</h4>
+                                <ul id="swotStrengths"></ul>
+                            </div>
+                            <div class="swot-item weaknesses">
+                                <h4><i class="fas fa-minus-circle"></i> Weaknesses</h4>
+                                <ul id="swotWeaknesses"></ul>
+                            </div>
+                            <div class="swot-item opportunities">
+                                <h4><i class="fas fa-lightbulb"></i> Opportunities</h4>
+                                <ul id="swotOpportunities"></ul>
+                            </div>
+                            <div class="swot-item threats">
+                                <h4><i class="fas fa-exclamation-triangle"></i> Threats</h4>
+                                <ul id="swotThreats"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategic Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tasks"></i> Strategic Recommendations & Action Plans</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="strategicActions">
+                            <!-- Strategic actions will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Insights -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-globe"></i> Market Insights</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="marketInsights">
+                            <!-- Market insights will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                <i class="fas fa-robot"></i> 
+                Powered by Amazon Insights AI Engine | 
+                Last Updated: <span id="lastUpdate">--</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Load Chart.js with multiple fallbacks
+        (function() {
+            const cdnUrls = [
+                'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js',
+                'https://unpkg.com/chart.js@4.4.0/dist/chart.min.js'
+            ];
+            
+            let currentCdn = 0;
+            
+            function loadChart() {
+                if (currentCdn >= cdnUrls.length) {
+                    console.warn('All Chart.js CDNs failed, loading local fallback');
+                    const script = document.createElement('script');
+                    script.src = 'chart-fallback.js';
+                    script.onload = function() {
+                        console.log('Chart.js fallback loaded');
+                        window.chartReady = true;
+                    };
+                    document.head.appendChild(script);
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = cdnUrls[currentCdn];
+                script.onload = function() {
+                    console.log(`Chart.js loaded from CDN ${currentCdn + 1}`);
+                    window.chartReady = true;
+                };
+                script.onerror = function() {
+                    console.warn(`CDN ${currentCdn + 1} failed, trying next...`);
+                    currentCdn++;
+                    loadChart();
+                };
+                document.head.appendChild(script);
+            }
+            
+            loadChart();
+        })();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

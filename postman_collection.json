@@ -183,6 +183,164 @@
                     ]
                 }
             }
+        },
+        {
+            "name": "🎯 Competitive Analysis",
+            "item": [
+                {
+                    "name": "Quick Competitive Setup",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\"B092XMWXK7\", \"B0BVY8K28Q\", \"B0CSMV2DTV\"],\n  \"group_name\": \"瑜伽墊競品分析\",\n  \"description\": \"針對瑜伽墊市場的競爭對手分析\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/quick-setup",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "quick-setup"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Competitive Group",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"我的產品競品分析\",\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"description\": \"針對我的主要產品進行競品分析\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/groups",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "groups"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Competitive Groups",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/groups",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "groups"]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Competitor",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"asin\": \"B092XMWXK7\",\n  \"competitor_name\": \"高端瑜伽墊競品A\",\n  \"priority\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/groups/1/competitors",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "groups", "1", "competitors"]
+                        }
+                    }
+                },
+                {
+                    "name": "Run Competitive Analysis (Basic)",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/groups/1/analyze",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "groups", "1", "analyze"]
+                        }
+                    }
+                },
+                {
+                    "name": "Run Analysis with LLM Report",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/groups/1/analyze?include_llm_report=true",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "groups", "1", "analyze"],
+                            "query": [
+                                {
+                                    "key": "include_llm_report",
+                                    "value": "true"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Positioning Report",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/groups/1/report",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "groups", "1", "report"]
+                        }
+                    }
+                },
+                {
+                    "name": "Check Tracking Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/groups/1/tracking-status",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "groups", "1", "tracking-status"]
+                        }
+                    }
+                },
+                {
+                    "name": "Batch Analysis All Groups",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/batch-analysis",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "batch-analysis"]
+                        }
+                    }
+                },
+                {
+                    "name": "System Summary",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/competitive/summary",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "competitive", "summary"]
+                        }
+                    }
+                }
+            ]
         }
     ]
 }

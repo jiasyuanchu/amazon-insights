@@ -1,0 +1,489 @@
+{
+	"info": {
+		"_postman_id": "competitive-analysis-api",
+		"name": "Amazon Insights - Competitive Analysis API",
+		"description": "Complete API collection for Amazon product competitive analysis engine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "amazon-insights"
+	},
+	"item": [
+		{
+			"name": "Quick Setup",
+			"item": [
+				{
+					"name": "Quick Competitive Setup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\n    \"B092XMWXK7\",\n    \"B0BVY8K28Q\",\n    \"B0CSMV2DTV\"\n  ],\n  \"group_name\": \"瑜伽墊競品分析\",\n  \"description\": \"針對高端瑜伽墊市場的競爭對手分析\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/quick-setup",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"quick-setup"
+							]
+						},
+						"description": "一鍵建立競品組並添加多個競爭對手"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Group Management",
+			"item": [
+				{
+					"name": "Create Competitive Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"我的產品競品分析\",\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"description\": \"針對我的主要產品進行競品分析\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups"
+							]
+						},
+						"description": "建立新的競品分析組"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups"
+							]
+						},
+						"description": "獲取所有競品分析組"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Group Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}"
+							]
+						},
+						"description": "獲取特定競品組的詳細資訊"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Group",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}"
+							]
+						},
+						"description": "刪除競品組"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Competitor Management",
+			"item": [
+				{
+					"name": "Add Competitor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"asin\": \"B092XMWXK7\",\n  \"competitor_name\": \"高端瑜伽墊競品A\",\n  \"priority\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}/competitors",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}",
+								"competitors"
+							]
+						},
+						"description": "向競品組添加競爭對手"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Competitor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}/competitors/{{competitor_asin}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}",
+								"competitors",
+								"{{competitor_asin}}"
+							]
+						},
+						"description": "從競品組移除競爭對手"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Tracking Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}/tracking-status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}",
+								"tracking-status"
+							]
+						},
+						"description": "檢查競品組中所有產品的追蹤狀態"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analysis & Reports",
+			"item": [
+				{
+					"name": "Run Basic Analysis",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}/analyze",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}",
+								"analyze"
+							]
+						},
+						"description": "執行基礎競品分析（結構化分析）"
+					},
+					"response": []
+				},
+				{
+					"name": "Run Analysis with LLM Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}/analyze?include_llm_report=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}",
+								"analyze"
+							],
+							"query": [
+								{
+									"key": "include_llm_report",
+									"value": "true"
+								}
+							]
+						},
+						"description": "執行完整競品分析（包含LLM智能報告）"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Positioning Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}/report",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}",
+								"report"
+							]
+						},
+						"description": "獲取詳細的競爭定位報告（含LLM分析）"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trend Analysis",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/{{group_id}}/trends?days=30",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"{{group_id}}",
+								"trends"
+							],
+							"query": [
+								{
+									"key": "days",
+									"value": "30"
+								}
+							]
+						},
+						"description": "獲取競品趨勢分析（指定天數）"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Batch Operations",
+			"item": [
+				{
+					"name": "Batch Analysis All Groups",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/batch-analysis",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"batch-analysis"
+							]
+						},
+						"description": "批次執行所有活躍競品組的分析"
+					},
+					"response": []
+				},
+				{
+					"name": "System Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/summary",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"summary"
+							]
+						},
+						"description": "獲取競品分析系統總覽"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Demo & Testing",
+			"item": [
+				{
+					"name": "Demo: Yoga Mat Analysis",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"main_product_asin\": \"B07R7RMQF5\",\n  \"competitor_asins\": [\n    \"B092XMWXK7\",\n    \"B0BVY8K28Q\",\n    \"B0CSMV2DTV\"\n  ],\n  \"group_name\": \"Demo: 瑜伽墊市場分析\",\n  \"description\": \"展示用瑜伽墊競品分析範例\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/quick-setup",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"quick-setup"
+							]
+						},
+						"description": "瑜伽墊市場競品分析範例"
+					},
+					"response": []
+				},
+				{
+					"name": "Demo: Run Full Analysis",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/competitive/groups/1/analyze?include_llm_report=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"competitive",
+								"groups",
+								"1",
+								"analyze"
+							],
+							"query": [
+								{
+									"key": "include_llm_report",
+									"value": "true"
+								}
+							]
+						},
+						"description": "執行範例群組的完整分析"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8001",
+			"type": "string"
+		},
+		{
+			"key": "group_id",
+			"value": "1",
+			"type": "string",
+			"description": "競品組ID，執行建立競品組後請更新此值"
+		},
+		{
+			"key": "competitor_asin",
+			"value": "B092XMWXK7",
+			"type": "string",
+			"description": "競爭對手ASIN"
+		}
+	]
+}

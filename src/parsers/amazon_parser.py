@@ -1,7 +1,7 @@
 import re
 import logging
 from bs4 import BeautifulSoup
-from typing import Dict, Optional, Union
+from typing import Dict, List, Optional, Union
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
@@ -41,7 +41,10 @@ class AmazonProductParser:
                 'rating': self._extract_rating(soup, markdown_content),
                 'review_count': self._extract_review_count(soup, markdown_content),
                 'bsr': self._extract_bsr(soup, markdown_content),
-                'availability': self._extract_availability(soup, markdown_content)
+                'availability': self._extract_availability(soup, markdown_content),
+                'bullet_points': self._extract_bullet_points(soup, markdown_content),
+                'product_description': self._extract_description(soup, markdown_content),
+                'key_features': self._extract_key_features(soup, markdown_content)
             }
             
             logger.info(f"Successfully parsed product: {product_info['title'][:50]}...")
@@ -267,3 +270,126 @@ class AmazonProductParser:
             return int(num_str)
         except ValueError:
             return None
+    
+    def _extract_bullet_points(self, soup: Optional[BeautifulSoup], markdown: str) -> List[str]:
+        """Extract product bullet points/features"""
+        bullet_points = []
+        
+        if soup:
+            # Try common bullet point selectors
+            bullet_selectors = [
+                '#feature-bullets ul li',
+                '.a-unordered-list .a-list-item',
+                '[data-automation-id="product-feature"] li',
+                '.a-vertical .a-spacing-mini'
+            ]
+            
+            for selector in bullet_selectors:
+                elements = soup.select(selector)
+                for element in elements:
+                    text = element.get_text(strip=True)
+                    if text and len(text) > 10 and len(text) < 500:  # Reasonable length
+                        bullet_points.append(text)
+                
+                if bullet_points:
+                    break
+        
+        # Extract from markdown if no HTML bullets found
+        if not bullet_points and markdown:
+            # Look for bullet point patterns
+            bullet_patterns = [
+                r'^\s*[-•*]\s+(.+)$',
+                r'^\s*\d+\.\s+(.+)$',
+                r'About this item\s*\n(.+?)(?:\n\n|\n[A-Z])',
+            ]
+            
+            for pattern in bullet_patterns:
+                matches = re.findall(pattern, markdown, re.MULTILINE | re.DOTALL)
+                for match in matches:
+                    if isinstance(match, str):
+                        lines = match.strip().split('\n')
+                        for line in lines:
+                            line = line.strip()
+                            if line and len(line) > 10 and len(line) < 500:
+                                bullet_points.append(line)
+                
+                if bullet_points:
+                    break
+        
+        # Clean and deduplicate
+        cleaned_bullets = []
+        seen = set()
+        for bullet in bullet_points[:10]:  # Limit to 10 bullets
+            bullet = bullet.strip()
+            if bullet and bullet not in seen and len(bullet) > 10:
+                cleaned_bullets.append(bullet)
+                seen.add(bullet)
+        
+        return cleaned_bullets
+    
+    def _extract_description(self, soup: Optional[BeautifulSoup], markdown: str) -> Optional[str]:
+        """Extract product description"""
+        if soup:
+            desc_selectors = [
+                '#productDescription',
+                '#feature-bullets + .a-section',
+                '.a-section.a-spacing-medium'
+            ]
+            
+            for selector in desc_selectors:
+                element = soup.select_one(selector)
+                if element:
+                    desc = element.get_text(strip=True)
+                    if desc and len(desc) > 50:
+                        return desc[:2000]  # Limit description length
+        
+        # Extract from markdown
+        if markdown:
+            # Look for description patterns
+            desc_patterns = [
+                r'Product Description\s*\n(.+?)(?:\n\n|\n[A-Z])',
+                r'About this item\s*\n(.+?)(?:\n\n|\nCustomer)',
+                r'Description\s*\n(.+?)(?:\n\n|\n[A-Z])',
+            ]
+            
+            for pattern in desc_patterns:
+                match = re.search(pattern, markdown, re.DOTALL | re.IGNORECASE)
+                if match:
+                    desc = match.group(1).strip()
+                    if len(desc) > 50:
+                        return desc[:2000]
+        
+        return None
+    
+    def _extract_key_features(self, soup: Optional[BeautifulSoup], markdown: str) -> Dict[str, List[str]]:
+        """Extract and categorize key product features"""
+        features = {
+            "materials": [],
+            "dimensions": [],
+            "colors": [],
+            "benefits": [],
+            "technical": [],
+            "other": []
+        }
+        
+        bullet_points = self._extract_bullet_points(soup, markdown)
+        
+        for bullet in bullet_points:
+            bullet_lower = bullet.lower()
+            
+            # Categorize features
+            if any(word in bullet_lower for word in ['material', 'made of', 'fabric', 'cotton', 'plastic', 'rubber', 'foam']):
+                features["materials"].append(bullet)
+            elif any(word in bullet_lower for word in ['inch', 'cm', 'mm', 'size', 'dimension', 'length', 'width', 'thick']):
+                features["dimensions"].append(bullet)
+            elif any(word in bullet_lower for word in ['color', 'colour', 'black', 'white', 'blue', 'red', 'green']):
+                features["colors"].append(bullet)
+            elif any(word in bullet_lower for word in ['benefit', 'improve', 'help', 'reduce', 'enhance', 'support']):
+                features["benefits"].append(bullet)
+            elif any(word in bullet_lower for word in ['technology', 'certified', 'tested', 'standard', 'grade']):
+                features["technical"].append(bullet)
+            else:
+                features["other"].append(bullet)
+        
+        # Remove empty categories
+        return {k: v for k, v in features.items() if v}
