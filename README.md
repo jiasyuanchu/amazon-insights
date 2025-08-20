@@ -1,5 +1,14 @@
 # Amazon Insights
 
+[![CI Pipeline](https://github.com/jiasyuanchu/amazon-insights/actions/workflows/ci.yml/badge.svg)](https://github.com/jiasyuanchu/amazon-insights/actions/workflows/ci.yml)
+[![CD Pipeline](https://github.com/jiasyuanchu/amazon-insights/actions/workflows/cd.yml/badge.svg)](https://github.com/jiasyuanchu/amazon-insights/actions/workflows/cd.yml)
+[![Security Audit](https://github.com/jiasyuanchu/amazon-insights/actions/workflows/dependency-update.yml/badge.svg)](https://github.com/jiasyuanchu/amazon-insights/actions/workflows/dependency-update.yml)
+[![codecov](https://codecov.io/gh/jiasyuanchu/amazon-insights/branch/main/graph/badge.svg)](https://codecov.io/gh/jiasyuanchu/amazon-insights)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-blue.svg)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-ready-blue.svg)](https://www.docker.com/)
+
 Amazon Product Tracking System - Track price, BSR, ratings, and review count changes of Amazon products using Firecrawl API.
 
 ## Features
@@ -292,3 +301,117 @@ python3 cache_manager.py warm-up
 # Test cache functionality
 python3 cache_manager.py test
 ```
+
+## CI/CD Pipeline
+
+The project includes comprehensive GitHub Actions workflows for continuous integration and deployment.
+
+### Automated Workflows
+
+#### CI Pipeline (`.github/workflows/ci.yml`)
+Triggered on every push and pull request:
+
+- **Code Quality**: Black formatting, Flake8 linting, MyPy type checking
+- **Security Scanning**: Bandit security scan, dependency vulnerability check
+- **Unit Testing**: Comprehensive test suite with 70%+ coverage requirement
+- **Integration Testing**: API endpoint testing with services
+- **Build Testing**: Docker image build validation
+- **Documentation**: Check for completeness and internationalization
+
+#### CD Pipeline (`.github/workflows/cd.yml`)
+Triggered on main branch pushes and tags:
+
+- **Docker Images**: Build and push to GitHub Container Registry
+- **Development Deployment**: Automatic deployment to dev environment
+- **Release Creation**: Automatic GitHub releases for version tags
+- **Notifications**: Deployment status notifications
+
+#### Dependency Management (`.github/workflows/dependency-update.yml`)
+Weekly automated dependency updates:
+
+- **Security Audits**: Weekly dependency vulnerability scanning
+- **Update PRs**: Automated pull requests for dependency updates
+- **Testing**: Validation of updated dependencies
+
+### Running CI/CD Locally
+
+#### Code Quality Checks
+```bash
+# Format code
+black .
+
+# Lint code
+flake8 .
+
+# Type checking
+mypy src/ --ignore-missing-imports
+
+# Security scan
+bandit -r src/
+```
+
+#### Test Execution
+```bash
+# Run complete test suite
+python run_tests.py
+
+# Run specific test categories
+python -m pytest tests/test_auth.py -v
+python -m pytest tests/test_competitive_analysis.py -v
+python -m pytest tests/test_api_endpoints.py -v
+
+# Generate coverage report
+python -m pytest --cov=src --cov-report=html
+```
+
+#### Build Testing
+```bash
+# Test Docker builds
+docker build -t amazon-insights-api --target production .
+docker build -f Dockerfile.frontend -t amazon-insights-frontend .
+
+# Test Docker Compose
+docker-compose config --quiet
+```
+
+### Status Badges
+
+The badges at the top of this README show:
+- **CI Pipeline**: Code quality, testing, and build status
+- **CD Pipeline**: Deployment and release status
+- **Security Audit**: Dependency security status
+- **Code Coverage**: Test coverage percentage
+- **License**: MIT license
+- **Python Version**: Minimum Python version requirement
+- **PostgreSQL**: Database version requirement
+- **Docker**: Container deployment ready
+
+### Development Workflow
+
+1. **Feature Development**:
+   ```bash
+   git checkout -b feature/new-feature
+   # Develop your feature
+   black .  # Format code
+   flake8 . # Check linting
+   python run_tests.py  # Run tests
+   ```
+
+2. **Create Pull Request**:
+   - CI pipeline automatically runs on PR creation
+   - All checks must pass before merge
+   - Code review required for main branch
+
+3. **Release Process**:
+   ```bash
+   git tag v1.2.3
+   git push origin v1.2.3
+   # CD pipeline automatically creates GitHub release
+   ```
+
+### Monitoring CI/CD
+
+- **GitHub Actions**: View workflow runs at `https://github.com/jiasyuanchu/amazon-insights/actions`
+- **Coverage Reports**: Available in CI artifacts and Codecov integration
+- **Security Reports**: Uploaded as artifacts in each workflow run
+- **Docker Images**: Available at GitHub Container Registry

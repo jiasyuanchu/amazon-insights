@@ -1,0 +1,44 @@
+[flake8]
+# Flake8 configuration for Amazon Insights
+
+# Maximum line length
+max-line-length = 127
+
+# Maximum complexity
+max-complexity = 10
+
+# Error codes to ignore
+ignore = 
+    # E203: whitespace before ':' (conflicts with black)
+    E203,
+    # W503: line break before binary operator (conflicts with black)
+    W503,
+    # E501: line too long (handled by black)
+    E501
+
+# Directories to exclude
+exclude =
+    .git,
+    __pycache__,
+    .pytest_cache,
+    .mypy_cache,
+    build,
+    dist,
+    *.egg-info,
+    .venv,
+    venv,
+    .env,
+    migrations,
+    .github
+
+# Files to include
+filename = *.py
+
+# Show source code for each error
+show-source = True
+
+# Show statistics
+statistics = True
+
+# Count errors
+count = True

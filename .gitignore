@@ -29,25 +29,88 @@ MANIFEST
 
 # Environment variables
 .env
+.env.local
+.env.*.local
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
 # Logs
 logs/
 *.log
+log/
 
 # Database
 *.db
+*.sqlite
 *.sqlite3
+data/*.db
+data/*.sqlite
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+test-results.xml
+test_results.json
+
+# Redis
+dump.rdb
+
+# Security reports
+bandit-report.json
+safety-report.json
+semgrep-report.json
+
+# Migration reports
+migration_report.json
 
 # Temporary files
 temp/
 tmp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+
+# CI/CD artifacts
+.github/workflows/*.log
+
+# Local development
+local_config.py
+dev_scripts/
+
+# API keys and secrets (double-check these are not committed)
+api_keys.json
+secrets.json
+*.pem
+*.key
+*.crt
+
+# Cache directories
+.cache/
+.mypy_cache/
+.pytest_cache/
