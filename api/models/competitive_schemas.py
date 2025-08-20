@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, Dict, List, Any
-from datetime import datetime
+from typing import Optional, Dict, List
 
 
 class CreateCompetitiveGroupRequest(BaseModel):

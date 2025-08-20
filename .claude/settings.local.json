@@ -9,7 +9,10 @@
       "Bash(python3 -m pip install:*)",
       "Bash(python3 -m black:*)",
       "Bash(python3 -m flake8:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(python3 -m pytest tests/test_simple.py -v)",
+      "Bash(python3:*)",
+      "Bash(docker build:*)"
     ],
     "deny": [],
     "ask": []

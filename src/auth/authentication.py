@@ -14,7 +14,8 @@ from enum import Enum
 
 from fastapi import HTTPException, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import jwt
+
+# import jwt  # Not used yet, commented out
 from passlib.context import CryptContext
 import redis
 

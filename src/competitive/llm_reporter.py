@@ -435,7 +435,7 @@ class LLMReporter:
                 "Consider price optimization to improve competitiveness"
             )
 
-        if rating_analysis.get("quality_advantage") == False:
+        if rating_analysis.get("quality_advantage") is False:
             positioning["recommendations"].append(
                 "Focus on product quality improvements and customer satisfaction"
             )

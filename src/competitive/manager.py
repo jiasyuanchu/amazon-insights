@@ -115,7 +115,7 @@ class CompetitiveManager:
                     session.query(CompetitiveGroup)
                     .filter(
                         CompetitiveGroup.id == group_id,
-                        CompetitiveGroup.is_active == True,
+                        CompetitiveGroup.is_active.is_(True),
                     )
                     .first()
                 )
