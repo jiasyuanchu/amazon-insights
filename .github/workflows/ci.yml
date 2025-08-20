@@ -1,0 +1,23 @@
+name: CI Pipeline
+
+  on:
+    push:
+      branches: [ main, develop ]
+    pull_request:
+      branches: [ main, develop ]
+
+  jobs:
+    test:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: |
+          pip install -r requirements.txt
+          pip install black flake8 mypy pytest
+      - run: black --check .
+      - run: flake8 .
+      - run: mypy src/ --ignore-missing-imports
+      - run: python -m pytest tests/ --cov=src
