@@ -12,7 +12,8 @@
       "Bash(rm:*)",
       "Bash(python3 -m pytest tests/test_simple.py -v)",
       "Bash(python3:*)",
-      "Bash(docker build:*)"
+      "Bash(docker build:*)",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []

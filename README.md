@@ -64,8 +64,9 @@ CACHE_ENABLED=True
 
 4. **Test System**:
 ```bash
-python3 test_tracker.py
+python3 scripts/test_tracker.py
 python3 cache_manager.py test
+python3 scripts/run_tests.py  # Complete test suite
 ```
 
 ## Usage
@@ -241,10 +242,17 @@ amazon-insights/
 ├── main.py               # CLI main program
 ├── app.py                # API main program
 ├── frontend_server.py    # Dashboard server
-├── cache_manager.py      # Cache management tool
-├── test_cache.py         # Cache testing
-├── test_tracker.py       # System testing
-└── test_competitive.py   # Competitive analysis testing
+├── scripts/              # Development and testing tools
+│   ├── test_cache.py     # Cache testing
+│   ├── test_tracker.py   # System testing
+│   ├── test_competitive.py # Competitive analysis testing
+│   ├── run_tests.py      # Test suite runner
+│   └── demo_competitive_workflow.py # Demo workflow
+├── deployment/           # Deployment configurations
+│   ├── docker-compose.yml # Multi-service deployment
+│   ├── Dockerfile        # Application container
+│   └── database_migration.py # Database migration tools
+└── tests/                # CI/CD test suites
 ```
 
 ## Data Tracking Items
@@ -376,11 +384,11 @@ python -m pytest --cov=src --cov-report=html
 #### Build Testing
 ```bash
 # Test Docker builds
-docker build -t amazon-insights-api --target production .
-docker build -f Dockerfile.frontend -t amazon-insights-frontend .
+docker build -f deployment/Dockerfile -t amazon-insights-api --target production .
+docker build -f deployment/Dockerfile.frontend -t amazon-insights-frontend .
 
 # Test Docker Compose
-docker-compose config --quiet
+docker-compose -f deployment/docker-compose.yml config --quiet
 ```
 
 ### Status Badges
