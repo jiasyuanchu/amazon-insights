@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Insights - Demo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            font-size: 1.2em;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+        .demo-notice {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        .demo-notice a {
+            color: #fff;
+            text-decoration: underline;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .feature-examples {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .cta-section {
+            text-align: center;
+            margin: 60px 0;
+            color: white;
+        }
+        .cta-button {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .cta-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Amazon Insights</h1>
+            <p class="subtitle">🌐 Competitive Analysis Dashboard - Live Demo</p>
+            <div class="demo-notice">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Demo Mode:</strong> This is a preview of the dashboard interface. 
+                <a href="https://github.com/jiasyuanchu/amazon-insights#installation-and-setup" target="_blank">
+                    Setup locally for full functionality with real Amazon data
+                </a>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="feature-title">Price Competitiveness Analysis</div>
+                <div class="feature-description">
+                    Analyzes your product pricing relative to competitors using a 0-100 scoring system.
+                </div>
+                <div class="feature-examples">
+                    <strong>Displays:</strong> Price position (competitive/expensive), market average, 
+                    competitor price distribution, pricing recommendations
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="feature-title">Quality & Rating Analysis</div>
+                <div class="feature-description">
+                    Comprehensive quality assessment based on Amazon ratings and customer reviews.
+                </div>
+                <div class="feature-examples">
+                    <strong>Includes:</strong> Rating comparisons, review volume analysis, 
+                    customer satisfaction trends, quality positioning insights
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-ranking-star"></i>
+                </div>
+                <div class="feature-title">Amazon BSR Ranking</div>
+                <div class="feature-description">
+                    Best Seller Rank analysis across multiple Amazon categories with historical trends.
+                </div>
+                <div class="feature-examples">
+                    <strong>Tracks:</strong> Category rankings, position changes, 
+                    competitive rank comparisons, market leadership status
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="feature-title">AI-Powered Insights</div>
+                <div class="feature-description">
+                    OpenAI GPT-4 generated competitive intelligence and strategic recommendations.
+                </div>
+                <div class="feature-examples">
+                    <strong>Generates:</strong> SWOT analysis, executive summaries, 
+                    strategic action plans, market opportunity identification
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="feature-title">Interactive Visualizations</div>
+                <div class="feature-description">
+                    Professional charts and graphs for data-driven competitive insights.
+                </div>
+                <div class="feature-examples">
+                    <strong>Features:</strong> Price comparison charts, rating bubble plots, 
+                    trend visualizations, competitive positioning maps
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="feature-title">Strategic Recommendations</div>
+                <div class="feature-description">
+                    Actionable business recommendations with priority scoring and impact assessment.
+                </div>
+                <div class="feature-examples">
+                    <strong>Provides:</strong> Price optimization strategies, feature enhancement plans, 
+                    market positioning advice, competitive response tactics
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Analyze Your Competition?</h2>
+            <p>Get real-time competitive intelligence for your Amazon products</p>
+            <a href="https://github.com/jiasyuanchu/amazon-insights" class="cta-button" target="_blank">
+                <i class="fas fa-github"></i> View on GitHub
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Simple analytics
+        console.log('Amazon Insights Demo - GitHub Pages');
+        console.log('For full functionality, see: https://github.com/jiasyuanchu/amazon-insights');
+    </script>
+</body>
+</html>
