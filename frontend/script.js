@@ -84,11 +84,21 @@ async function initializeApp() {
             elements.groupSelect.selectedIndex = 1; // Select first actual group (not placeholder)
             await loadAnalysisData(elements.groupSelect.value);
         } else {
-            showError('No competitive groups found. Please create competitive groups using the API first.');
+            // If no groups, show demo mode anyway for GitHub Pages
+            if (window.location.hostname.includes('github.io')) {
+                showDemoModeInterface();
+            } else {
+                showError('No competitive groups found. Please create competitive groups using the API first.');
+            }
         }
     } catch (error) {
         console.error('Initialization failed:', error);
-        showError('Initialization failed: ' + error.message);
+        // Always show demo mode on GitHub Pages, even if API fails
+        if (window.location.hostname.includes('github.io')) {
+            showDemoModeInterface();
+        } else {
+            showError('Initialization failed: ' + error.message);
+        }
     }
 }
 
@@ -113,6 +123,13 @@ async function loadCompetitiveGroups() {
         console.log(`Loaded ${groups.length} competitive groups`);
     } catch (error) {
         console.error('Failed to load groups:', error);
+        
+        // If on GitHub Pages, don't throw error - we'll show demo mode
+        if (window.location.hostname.includes('github.io')) {
+            console.log('GitHub Pages detected - will show demo mode');
+            return; // Don't throw error
+        }
+        
         throw new Error('Failed to load competitive groups list');
     }
 }
