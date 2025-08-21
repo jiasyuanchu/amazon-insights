@@ -1,0 +1,4 @@
+#!/bin/bash
+# 快速覆蓋率報告命令
+cd "$(dirname "$0")"
+python3 scripts/coverage_report.py

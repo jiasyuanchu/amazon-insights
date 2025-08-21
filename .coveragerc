@@ -1,0 +1,57 @@
+[run]
+# 啟用分支覆蓋率測試
+branch = True
+
+# 指定要測試的源碼目錄
+source = src, api, config, app.py, tasks.py, main.py
+
+# 排除不需要測試的文件
+omit = 
+    */tests/*
+    */test_*
+    */__pycache__/*
+    */migrations/*
+    */venv/*
+    */env/*
+    setup.py
+    conftest.py
+    */scripts/demo_*
+    frontend_server.py
+    cache_manager.py
+    start_api.py
+
+# 包含所有Python文件
+include = 
+    src/*
+    api/*
+    config/*
+    app.py
+    tasks.py
+    main.py
+
+[report]
+# 顯示缺失的行號
+show_missing = True
+
+# 跳過已完全覆蓋的文件
+skip_covered = False
+
+# 排序方式：按覆蓋率從低到高
+sort = Cover
+
+# 覆蓋率精度
+precision = 1
+
+# 排除完全空白的文件
+skip_empty = True
+
+[html]
+# HTML報告目錄
+directory = htmlcov
+
+# 顯示上下文
+show_contexts = True
+
+[xml]
+# XML報告文件名
+output = coverage.xml

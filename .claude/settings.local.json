@@ -13,7 +13,13 @@
       "Bash(python3 -m pytest tests/test_simple.py -v)",
       "Bash(python3:*)",
       "Bash(docker build:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(exit)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(python -m pytest --cov=. --cov-report=term-missing)",
+      "Bash(chmod:*)",
+      "Bash(grep:*)",
+      "Bash(./coverage)"
     ],
     "deny": [],
     "ask": []
