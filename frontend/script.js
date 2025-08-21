@@ -30,6 +30,15 @@ const elements = {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing Amazon Insights Dashboard...');
     
+    // Check if this is a demo environment (GitHub Pages)
+    const isDemoMode = window.location.hostname.includes('github.io');
+    
+    if (isDemoMode) {
+        // Show demo mode interface
+        showDemoModeInterface();
+        return;
+    }
+    
     // Check if Chart.js is loaded
     const initWithDelay = () => {
         if (typeof Chart === 'undefined' && !window.chartReady) {
@@ -650,4 +659,288 @@ function showMainContent() {
     setTimeout(() => {
         elements.mainContent.classList.remove('fade-in');
     }, 500);
+}
+
+// Demo mode interface for GitHub Pages
+function showDemoModeInterface() {
+    elements.loadingState.style.display = 'none';
+    elements.errorState.style.display = 'none';
+    elements.mainContent.style.display = 'block';
+    
+    // Update header for demo mode
+    const headerContent = document.querySelector('.header-content');
+    headerContent.innerHTML = `
+        <h1><i class="fas fa-chart-line"></i> Amazon Insights</h1>
+        <p class="subtitle">🌐 Live Demo - Competitive Analysis Dashboard</p>
+        <div class="demo-notice">
+            <i class="fas fa-info-circle"></i> 
+            <strong>Demo Mode:</strong> Interface preview without live data. 
+            <a href="https://github.com/jiasyuanchu/amazon-insights#installation-and-setup" target="_blank">
+                Setup locally for full functionality
+            </a>
+        </div>
+    `;
+    
+    // Hide group selector and refresh button in demo mode
+    elements.groupSelect.style.display = 'none';
+    elements.refreshBtn.style.display = 'none';
+    
+    // Show demo content
+    displayDemoContent();
+}
+
+// Display demo content explaining each component
+function displayDemoContent() {
+    // Update overview cards with explanations
+    updateDemoOverviewCards();
+    
+    // Show demo charts with explanations
+    displayDemoCharts();
+    
+    // Show demo analysis sections
+    displayDemoAnalysis();
+    
+    // Update timestamp
+    elements.lastUpdate.textContent = new Date().toLocaleString('en-US');
+}
+
+// Demo overview cards
+function updateDemoOverviewCards() {
+    const demoData = [
+        {
+            id: 'priceScore',
+            label: 'pricePosition',
+            title: 'Price Competitiveness',
+            description: 'Analyzes your product pricing relative to competitors (0-100 scale)',
+            icon: 'fas fa-dollar-sign',
+            example: 'Shows if your price is competitive, expensive, or budget-friendly'
+        },
+        {
+            id: 'qualityScore', 
+            label: 'qualityPosition',
+            title: 'Quality Competitiveness',
+            description: 'Based on Amazon ratings and review analysis (0-100 scale)',
+            icon: 'fas fa-star',
+            example: 'Compares customer satisfaction vs competitors'
+        },
+        {
+            id: 'popularityScore',
+            label: 'popularityPosition', 
+            title: 'Market Popularity',
+            description: 'BSR ranking performance and market position (0-100 scale)',
+            icon: 'fas fa-fire',
+            example: 'Shows sales ranking performance vs competition'
+        },
+        {
+            id: 'overallScore',
+            label: 'overallPosition',
+            title: 'Overall Competitiveness', 
+            description: 'Combined score across all competitive dimensions',
+            icon: 'fas fa-trophy',
+            example: 'Comprehensive competitive strength assessment'
+        }
+    ];
+    
+    demoData.forEach(item => {
+        document.getElementById(item.id).innerHTML = `
+            <div class="demo-explanation">
+                <h4>${item.title}</h4>
+                <p>${item.description}</p>
+                <small><strong>Example:</strong> ${item.example}</small>
+            </div>
+        `;
+        document.getElementById(item.label).textContent = 'Demo Mode';
+    });
+}
+
+// Demo charts with explanations
+function displayDemoCharts() {
+    // Price chart explanation
+    const priceChartContainer = document.getElementById('priceChart').parentElement;
+    priceChartContainer.innerHTML = `
+        <div class="demo-chart-explanation">
+            <h4><i class="fas fa-chart-bar"></i> Price Comparison Chart</h4>
+            <p>Visual comparison of your product price vs competitors:</p>
+            <ul>
+                <li><strong>Green Bar:</strong> Your main product price</li>
+                <li><strong>Blue Bars:</strong> Competitor prices</li>
+                <li><strong>Analysis:</strong> Instantly see if you're priced competitively</li>
+            </ul>
+            <div class="chart-preview">
+                📊 <em>Interactive bar chart displays here with real data</em>
+            </div>
+        </div>
+    `;
+    
+    // Rating chart explanation  
+    const ratingChartContainer = document.getElementById('ratingChart').parentElement;
+    ratingChartContainer.innerHTML = `
+        <div class="demo-chart-explanation">
+            <h4><i class="fas fa-star-half-alt"></i> Rating vs Reviews Bubble Chart</h4>
+            <p>Bubble chart showing rating performance vs review volume:</p>
+            <ul>
+                <li><strong>X-axis:</strong> Product rating (1-5 stars)</li>
+                <li><strong>Y-axis:</strong> Review count (logarithmic scale)</li>
+                <li><strong>Bubble size:</strong> Relative review volume</li>
+                <li><strong>Colors:</strong> Your product (green) vs competitors (blue)</li>
+            </ul>
+            <div class="chart-preview">
+                🫧 <em>Interactive bubble chart displays here with real data</em>
+            </div>
+        </div>
+    `;
+}
+
+// Demo analysis sections
+function displayDemoAnalysis() {
+    // BSR Analysis demo
+    const bsrDiv = document.getElementById('bsrAnalysis');
+    bsrDiv.innerHTML = `
+        <div class="demo-analysis-explanation">
+            <h4>Amazon Best Seller Rank Analysis</h4>
+            <p>Comprehensive BSR (Best Seller Rank) competitive positioning:</p>
+            
+            <div class="demo-metrics-grid">
+                <div class="demo-metric">
+                    <strong>Main Product Rank:</strong> Your product's ranking in each category
+                </div>
+                <div class="demo-metric">
+                    <strong>Market Position:</strong> Leading, Following, or Middle position
+                </div>
+                <div class="demo-metric">
+                    <strong>Best Rank:</strong> Highest ranking achieved in period
+                </div>
+                <div class="demo-metric">
+                    <strong>Average Rank:</strong> Average performance over time period
+                </div>
+            </div>
+            
+            <p><small><em>Real data shows ranking across multiple Amazon categories</em></small></p>
+        </div>
+    `;
+    
+    // Executive Summary demo
+    const executiveSummary = document.getElementById('executiveSummary');
+    executiveSummary.innerHTML = `
+        <div class="demo-analysis-explanation">
+            <h4>AI-Powered Executive Summary</h4>
+            <p>OpenAI GPT-4 generated competitive positioning overview including:</p>
+            <ul>
+                <li>Overall market position assessment</li>
+                <li>Competitive strength analysis</li>
+                <li>Key performance indicators</li>
+                <li>Strategic positioning insights</li>
+            </ul>
+            <p><small><em>Generated automatically from your competitive analysis data</em></small></p>
+        </div>
+    `;
+    
+    // SWOT Analysis demo
+    displayDemoSWOT();
+    
+    // Strategic Actions demo
+    displayDemoStrategicActions();
+    
+    // Market Insights demo
+    displayDemoMarketInsights();
+}
+
+function displayDemoSWOT() {
+    const swotSections = {
+        swotStrengths: {
+            title: 'Strengths',
+            description: 'Competitive advantages identified from data analysis',
+            examples: ['Superior customer ratings', 'Competitive pricing position', 'Unique product features']
+        },
+        swotWeaknesses: {
+            title: 'Weaknesses', 
+            description: 'Areas requiring improvement based on competitor comparison',
+            examples: ['Limited feature differentiation', 'Higher price point', 'Lower review volume']
+        },
+        swotOpportunities: {
+            title: 'Opportunities',
+            description: 'Market opportunities identified through competitive analysis', 
+            examples: ['Premium market expansion', 'Feature gap exploitation', 'Underserved segments']
+        },
+        swotThreats: {
+            title: 'Threats',
+            description: 'Competitive threats and market risks',
+            examples: ['New competitor entry', 'Price competition intensification', 'Market saturation']
+        }
+    };
+    
+    Object.entries(swotSections).forEach(([elementId, data]) => {
+        const element = document.getElementById(elementId);
+        element.innerHTML = `
+            <div class="demo-swot-explanation">
+                <h5>${data.title}</h5>
+                <p>${data.description}</p>
+                <div class="demo-examples">
+                    <strong>Examples:</strong>
+                    ${data.examples.map(example => `<span class="demo-tag">${example}</span>`).join('')}
+                </div>
+            </div>
+        `;
+    });
+}
+
+function displayDemoStrategicActions() {
+    const actionsDiv = document.getElementById('strategicActions');
+    actionsDiv.innerHTML = `
+        <div class="demo-analysis-explanation">
+            <h4>AI-Generated Strategic Recommendations</h4>
+            <p>Actionable business insights with priority scoring:</p>
+            
+            <div class="demo-action-examples">
+                <div class="demo-action-item">
+                    <div class="demo-action-header">
+                        <span class="demo-action-title">Example: Price Optimization Strategy</span>
+                        <span class="demo-priority priority-high">High Priority</span>
+                    </div>
+                    <p class="demo-action-desc">Analyze competitor pricing and adjust strategy for better market position</p>
+                    <p class="demo-action-impact"><strong>Expected Impact:</strong> 10-15% improvement in competitive ranking</p>
+                </div>
+                
+                <div class="demo-action-item">
+                    <div class="demo-action-header">
+                        <span class="demo-action-title">Example: Feature Enhancement Plan</span>
+                        <span class="demo-priority priority-medium">Medium Priority</span>
+                    </div>
+                    <p class="demo-action-desc">Address feature gaps identified through competitor analysis</p>
+                    <p class="demo-action-impact"><strong>Expected Impact:</strong> Enhanced product differentiation</p>
+                </div>
+            </div>
+            
+            <p><small><em>Real recommendations generated from actual competitive data analysis</em></small></p>
+        </div>
+    `;
+}
+
+function displayDemoMarketInsights() {
+    const insightsDiv = document.getElementById('marketInsights');
+    insightsDiv.innerHTML = `
+        <div class="demo-analysis-explanation">
+            <h4>Market Intelligence Insights</h4>
+            <p>Comprehensive market analysis including:</p>
+            
+            <div class="demo-insights-grid">
+                <div class="demo-insight-item">
+                    <h5><i class="fas fa-chart-line"></i> Market Dynamics</h5>
+                    <p>Price volatility, market maturity, competition intensity analysis</p>
+                </div>
+                
+                <div class="demo-insight-item">
+                    <h5><i class="fas fa-users"></i> Competitive Landscape</h5>
+                    <p>Market leadership analysis, quality differentiation assessment</p>
+                </div>
+                
+                <div class="demo-insight-item">
+                    <h5><i class="fas fa-trending-up"></i> Trend Analysis</h5>
+                    <p>Market trends, emerging opportunities, competitive shifts</p>
+                </div>
+            </div>
+            
+            <p><small><em>Insights derived from real-time Amazon data analysis</em></small></p>
+        </div>
+    `;
 }
