@@ -108,7 +108,16 @@ API server will start at `http://localhost:8001`
 
 ### Competitive Analysis Dashboard
 
-#### Start Dashboard Interface
+#### Option 1: GitHub Pages Deployment (Recommended for Demo)
+**🌐 Live Demo**: [https://jiasyuanchu.github.io/amazon-insights/](https://jiasyuanchu.github.io/amazon-insights/)
+
+The dashboard is automatically deployed to GitHub Pages via GitHub Actions:
+- ✅ **Automatic Deployment**: Every push to `main` triggers deployment
+- ✅ **Free Hosting**: No server costs or maintenance required
+- ✅ **Global CDN**: Fast loading worldwide with HTTPS
+- ✅ **Professional URL**: Clean, shareable link for demos
+
+#### Option 2: Local Development
 ```bash
 # Start API server (required)
 python3 start_api.py
@@ -311,18 +320,18 @@ The project includes comprehensive GitHub Actions workflows for continuous integ
 #### CI Pipeline (`.github/workflows/ci.yml`)
 Triggered on every push and pull request:
 
-- **Code Quality**: Black formatting, Flake8 linting, MyPy type checking
-- **Security Scanning**: Bandit security scan, dependency vulnerability check
-- **Unit Testing**: Comprehensive test suite with 70%+ coverage requirement
-- **Integration Testing**: API endpoint testing with services
-- **Build Testing**: Docker image build validation
-- **Documentation**: Check for completeness and internationalization
+- **Environment Setup**: Python 3.11 with dependency installation
+- **Project Validation**: File structure and configuration checks
+- **Import Testing**: Core module import validation
+- **Basic Functionality**: Essential component testing
 
-#### CD Pipeline (`.github/workflows/cd.yml`)
-Triggered on main branch pushes and tags:
+#### CD Pipeline (`.github/workflows/deploy-pages.yml`)
+Triggered on main branch pushes:
 
-- **Docker Images**: Build and push to GitHub Container Registry
-- **Development Deployment**: Automatic deployment to dev environment
+- **Frontend Deployment**: Automatic deployment to GitHub Pages
+- **Live Demo**: Updates [https://jiasyuanchu.github.io/amazon-insights/](https://jiasyuanchu.github.io/amazon-insights/)
+- **Zero Configuration**: No server setup or maintenance required
+- **Global CDN**: Fast loading with automatic HTTPS
 - **Release Creation**: Automatic GitHub releases for version tags
 - **Notifications**: Deployment status notifications
 

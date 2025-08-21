@@ -1,5 +1,13 @@
-// API Configuration
-const API_BASE_URL = 'http://localhost:8001/api/v1';
+// API Configuration - Auto-detect environment
+const API_BASE_URL = (() => {
+    // Check if running on GitHub Pages
+    if (window.location.hostname.includes('github.io')) {
+        // Production API URL - you'll need to replace this with your actual API domain
+        return 'https://your-api-domain.herokuapp.com/api/v1';
+    }
+    // Local development
+    return 'http://localhost:8001/api/v1';
+})();
 
 // Global variables
 let currentAnalysisData = null;
