@@ -71,8 +71,8 @@ services:
   # Main API Application
   api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: deployment/Dockerfile
       target: production
     container_name: amazon-insights-api
     environment:
@@ -116,8 +116,8 @@ services:
   # Celery Workers for Background Tasks
   worker:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: deployment/Dockerfile
       target: worker
     container_name: amazon-insights-worker
     environment:
@@ -150,8 +150,8 @@ services:
   # Celery Beat Scheduler
   scheduler:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: deployment/Dockerfile
       target: scheduler
     container_name: amazon-insights-scheduler
     environment:
